@@ -4,134 +4,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="ChatMix - دردشة عامة للجميع">
-<title>ChatMix - الدردشة العامة</title>
-
+<meta name="description" content="ChatMix - دردشة خاصة">
+<title>ChatMix</title>
 <style>
 :root{
-  --bg:#0c1020;
-  --panel:#151b30;
-  --text:#f5f6ff;
-  --muted:#aab2cb;
-  --accent:#8b5cf6;
-  --green:#22c7b8
+  --bg:#0c1020;--panel:#151b30;--text:#f5f6ff;
+  --muted:#aab2cb;--accent:#8b5cf6;--green:#22c7b8;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:radial-gradient(circle at top right,#25204c,#0c1020 55%);
-  color:var(--text);
-  font-family:Tahoma,Arial,sans-serif
+  margin:0;background:radial-gradient(circle at top right,#25204c,#0c1020 55%);
+  color:var(--text);font-family:Tahoma,Arial,sans-serif
 }
-button,textarea{font:inherit}
-.wrap{max-width:950px;margin:auto;padding:18px}
-header{
-  display:flex;align-items:center;
-  justify-content:space-between;padding:15px 0 25px
-}
-.brand{font-size:30px;font-weight:bold;color:#9b80ff}
-button{
-  border:0;border-radius:12px;padding:12px 17px;
-  cursor:pointer;font-weight:bold
-}
+button,input{font:inherit}
+.wrap{max-width:900px;margin:auto;padding:15px}
+header{display:flex;justify-content:space-between;align-items:center;padding:15px 0 22px}
+.brand{font-size:29px;font-weight:bold;color:#9b80ff}
+.panel{background:var(--panel);border:1px solid #2a3452;border-radius:18px;padding:18px;margin-bottom:16px}
+h1{font-size:clamp(25px,5vw,36px);margin:0 0 10px}
+h2{font-size:19px;margin:0 0 15px}
+.sub,.muted{color:var(--muted);line-height:1.8}
+.muted,.notice{font-size:12px}
+.notice{color:var(--muted);line-height:1.8}
+button{border:0;border-radius:11px;padding:11px 15px;cursor:pointer;font-weight:bold}
+button:disabled{opacity:.5}
 .primary{background:var(--accent);color:white}
 .secondary{background:#293452;color:white}
-.hero{
-  background:linear-gradient(120deg,#28214e,#182b49);
-  border:1px solid #3b376b;border-radius:22px;
-  padding:30px;margin-bottom:20px
+.danger{background:#512b3a;color:#ffd9df}
+input{
+  width:100%;background:#0e1528;color:white;border:1px solid #35405f;
+  border-radius:11px;padding:13px;margin:8px 0
 }
-h1{font-size:clamp(27px,5vw,40px);margin:0 0 12px}
-h2{font-size:19px;margin:0 0 15px}
-.sub{color:var(--muted);line-height:1.9}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.panel{
-  background:var(--panel);border:1px solid #2a3452;
-  border-radius:18px;padding:18px
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.row button{flex-shrink:0}
+#app{display:none}
+#people,#requests,#chats{display:grid;gap:9px}
+.person{
+  background:#10182d;border:1px solid #2a3452;border-radius:13px;
+  padding:12px;display:flex;justify-content:space-between;
+  align-items:center;gap:10px
 }
-textarea{
-  width:100%;background:#0e1528;color:white;
-  border:1px solid #35405f;border-radius:12px;
-  padding:13px;margin:7px 0;min-height:95px;
-  resize:vertical
+.person strong{overflow-wrap:anywhere}
+.person small{display:block;color:var(--muted);margin-top:5px}
+#conversation{display:none}
+#chatMessages{
+  min-height:180px;max-height:390px;overflow-y:auto;
+  background:#0e1528;border-radius:13px;padding:12px;margin:12px 0
 }
-.post{border-top:1px solid #2a3452;padding:16px 0}
-.post-head{display:flex;align-items:center;gap:10px}
-.avatar{
-  width:38px;height:38px;background:#443576;
-  border-radius:50%;display:grid;place-items:center;
-  flex-shrink:0
+.bubble{
+  max-width:85%;padding:10px 12px;margin:8px 0;
+  border-radius:13px;background:#293452;overflow-wrap:anywhere;
+  white-space:pre-wrap
 }
-.post p{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
-.meta,.muted{font-size:12px;color:var(--muted)}
-.notice{font-size:12px;color:var(--muted);line-height:1.8}
-.status{margin-top:12px;color:var(--green);font-size:13px}
-footer{text-align:center;color:var(--muted);padding:25px}
-@media(max-width:600px){
-  .wrap{padding:12px}
-  .hero{padding:20px}
-}
+.bubble.mine{background:#49368a;margin-right:auto}
+.bubble small{display:block;color:#c6c9df;font-size:10px;margin-top:5px}
+.status{color:var(--green);font-size:13px;line-height:1.8}
+footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
+@media(max-width:600px){.wrap{padding:11px}.panel{padding:14px}}
 </style>
 </head>
-
 <body>
 <div class="wrap">
 
 <header>
   <div class="brand">✦ ChatMix</div>
-  <button class="secondary" onclick="joinGuest()">اختيار الاسم</button>
+  <button class="secondary" id="logoutButton" style="display:none" onclick="leaveChat()">خروج</button>
 </header>
 
-<section class="hero">
+<section class="panel" id="welcome">
   <h1>مرحبا بك في ChatMix 👋</h1>
-  <p class="sub">
-    دردشة عامة تجمع الجميع. شارك أفكارك وتعرف على أشخاص جدد
-    واحترم الآخرين.
-  </p>
-  <div class="actions">
-    <button class="primary" onclick="joinGuest()">الدخول كزائر</button>
-    <button class="secondary"
-      onclick="document.getElementById('chat').scrollIntoView()">
-      دخول الدردشة
-    </button>
-  </div>
-  <p class="muted" id="status">أنت تتصفح كزائر</p>
+  <p class="sub">اختار اسماً مستعاراً وادخل للدردشة.</p>
+  <label for="nickname">الاسم المستعار</label>
+  <input id="nickname" maxlength="24" placeholder="اختار اسماً مستعاراً">
+  <button class="primary" id="enterButton" onclick="enterChat()">الدخول إلى ChatMix</button>
+  <p class="notice">استعمل اسماً مستعاراً، وما تشاركش معلوماتك الشخصية.</p>
+  <p id="welcomeStatus" class="status"></p>
 </section>
 
-<main class="panel" id="chat">
-  <h2>💬 الدردشة العامة</h2>
+<main id="app">
+  <section class="panel">
+    <h2>مرحبا، <span id="myName"></span></h2>
+    <p class="muted">العمر والجنس: غير محدد</p>
+    <p id="appStatus" class="status">متصل</p>
+  </section>
 
-  <div class="compose">
-    <textarea id="postText" maxlength="1000"
-      placeholder="شنو بغيتي تقول للمشاركين؟"></textarea>
+  <section class="panel">
+    <h2>🟢 الزوار المتصلون</h2>
+    <p class="notice">اختار زائراً لإرسال طلب محادثة خاصة.</p>
+    <div id="people">جاري تحميل الزوار...</div>
+  </section>
 
-    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
-      <span class="muted" id="who">اختار اسماً مستعاراً للبدء</span>
-      <button class="primary" id="sendButton" onclick="publish()">
-        إرسال الرسالة
-      </button>
+  <section class="panel">
+    <h2>📩 طلبات المحادثة</h2>
+    <div id="requests">ما كايناش طلبات جديدة.</div>
+  </section>
+
+  <section class="panel">
+    <h2>💬 محادثاتي</h2>
+    <div id="chats">ما عندك حتى محادثة مقبولة دابا.</div>
+  </section>
+
+  <section class="panel" id="conversation">
+    <div class="row" style="justify-content:space-between">
+      <h2 id="chatTitle">المحادثة</h2>
+      <button class="secondary" onclick="closeConversation()">رجوع</button>
     </div>
-    <p class="notice" id="messageStatus"></p>
-  </div>
-
-  <div id="posts">
-    <p class="muted">جاري تحميل الرسائل...</p>
-  </div>
+    <div id="chatMessages"></div>
+    <div class="row">
+      <input id="messageInput" maxlength="2000" placeholder="كتب رسالتك..." style="flex:1">
+      <button class="primary" id="sendButton" onclick="sendMessage()">إرسال</button>
+    </div>
+    <p id="chatStatus" class="notice"></p>
+  </section>
 </main>
 
-<section class="panel" style="margin-top:20px">
+<section class="panel">
   <h2>قواعد ChatMix</h2>
-  <p class="sub">
-    احترم المشاركين، ولا تنشر كلمات المرور أو المعلومات الشخصية
-    أو الروابط المشبوهة.
+  <p class="notice">
+    احترم الآخرين. ما تشاركش كلمات المرور أو رقم الهاتف أو العنوان.
+    ما تضغطش على الروابط المشبوهة.
   </p>
 </section>
 
-<footer>© 2026 ChatMix - جميع الحقوق محفوظة</footer>
+<footer>© 2026 ChatMix</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const SUPABASE_URL =
   "https://cnhyxbrqxwrwlrzpxgem.supabase.co";
@@ -139,174 +137,455 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_0COEsiw0kZ3KbHg0sgtZaw_RKUHAXHk";
 
-const supabaseClient = window.supabase.createClient(
+const db = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
 
-let currentName = sessionStorage.getItem("chatmix_name") || "";
-const displayedMessages = new Set();
+const el = id => document.getElementById(id);
 
-const posts = document.getElementById("posts");
-const statusBox = document.getElementById("status");
-const whoBox = document.getElementById("who");
-const messageStatus = document.getElementById("messageStatus");
+let myUserId = null;
+let myProfile = null;
+let currentConversation = null;
+let currentOtherUser = null;
+let refreshTimer = null;
+let messageTimer = null;
+let loadingMessages = false;
 
-function updateName(){
-  if(currentName){
-    statusBox.textContent = "مرحبا بك " + currentName;
-    whoBox.textContent = "كتشارك باسم " + currentName;
-  }
+function setStatus(id,text){
+  el(id).textContent = text;
 }
 
-function joinGuest(){
-  const name = prompt("اختار اسماً مستعاراً (3 أحرف على الأقل):");
+async function enterChat(){
+  const name = el("nickname").value.trim();
+  const button = el("enterButton");
 
-  if(name === null) return;
-
-  const cleanName = name.trim();
-
-  if(cleanName.length < 3){
-    alert("الاسم خاصو يكون 3 أحرف على الأقل.");
+  if(name.length < 3 || name.length > 24){
+    setStatus("welcomeStatus","الاسم خاصو يكون بين 3 و24 حرف.");
     return;
   }
 
-  currentName = cleanName.slice(0,24);
-  sessionStorage.setItem("chatmix_name",currentName);
-  updateName();
+  button.disabled = true;
+  setStatus("welcomeStatus","جاري الدخول...");
+
+  try{
+    let {data:{session},error} = await db.auth.getSession();
+    if(error) throw error;
+
+    if(!session){
+      const result = await db.auth.signInAnonymously();
+      if(result.error) throw result.error;
+      session = result.data.session;
+    }
+
+    if(!session?.user?.id){
+      throw new Error("تعذر إنشاء هوية الزائر.");
+    }
+
+    myUserId = session.user.id;
+
+    const {data:existing,error:profileError} = await db
+      .from("profiles")
+      .select("user_id,display_name,age_group")
+      .eq("user_id",myUserId)
+      .maybeSingle();
+
+    if(profileError) throw profileError;
+
+    if(existing){
+      myProfile = existing;
+    }else{
+      const {data:created,error:createError} = await db
+        .from("profiles")
+        .insert({
+          user_id:myUserId,
+          display_name:name.slice(0,24),
+          age_group:"unspecified"
+        })
+        .select("user_id,display_name,age_group")
+        .single();
+
+      if(createError) throw createError;
+      myProfile = created;
+    }
+
+    el("welcome").style.display = "none";
+    el("app").style.display = "block";
+    el("logoutButton").style.display = "inline-block";
+    el("myName").textContent = myProfile.display_name;
+
+    await updatePresence();
+    await refreshAll();
+
+    clearInterval(refreshTimer);
+    refreshTimer = setInterval(async()=>{
+      await updatePresence();
+      await refreshAll();
+    },30000);
+
+  }catch(error){
+    setStatus("welcomeStatus","وقع مشكل: "+error.message);
+  }finally{
+    button.disabled = false;
+  }
 }
 
-function showMessage(message){
-  const id = String(message.id);
+async function updatePresence(){
+  if(!myUserId) return;
 
-  if(displayedMessages.has(id)) return;
-  displayedMessages.add(id);
+  const {error} = await db
+    .from("profiles")
+    .update({last_seen:new Date().toISOString()})
+    .eq("user_id",myUserId);
 
-  const article = document.createElement("article");
-  article.className = "post";
-
-  const head = document.createElement("div");
-  head.className = "post-head";
-
-  const avatar = document.createElement("div");
-  avatar.className = "avatar";
-  avatar.textContent = "🙂";
-
-  const info = document.createElement("div");
-
-  const name = document.createElement("strong");
-  name.textContent = message.username;
-
-  const meta = document.createElement("div");
-  meta.className = "meta";
-
-  const date = new Date(message.created_at);
-  meta.textContent = date.toLocaleString("ar-MA");
-
-  info.append(name,meta);
-  head.append(avatar,info);
-
-  const content = document.createElement("p");
-  content.textContent = message.content;
-
-  article.append(head,content);
-  posts.appendChild(article);
+  setStatus("appStatus",error ? "تعذر تحديث الاتصال" : "متصل");
 }
 
-async function loadMessages(){
-  const {data,error} = await supabaseClient
-    .from("messages")
-    .select("id,username,content,created_at")
-    .order("created_at",{ascending:false})
+async function refreshAll(){
+  await Promise.all([
+    loadPeople(),
+    loadRequests(),
+    loadChats()
+  ]);
+}
+
+async function loadPeople(){
+  const {data,error} = await db
+    .from("profiles")
+    .select("user_id,display_name,last_seen")
+    .neq("user_id",myUserId)
+    .order("last_seen",{ascending:false})
+    .limit(50);
+
+  if(error){
+    el("people").textContent = "تعذر تحميل الزوار: "+error.message;
+    return;
+  }
+
+  const cutoff = Date.now()-5*60*1000;
+  const people = (data||[]).filter(p=>
+    new Date(p.last_seen).getTime()>cutoff
+  );
+
+  el("people").replaceChildren();
+
+  if(!people.length){
+    el("people").textContent="ما كاين حتى زائر متصل دابا.";
+    return;
+  }
+
+  people.forEach(person=>{
+    const card=document.createElement("div");
+    card.className="person";
+
+    const info=document.createElement("div");
+    const name=document.createElement("strong");
+    name.textContent=person.display_name;
+
+    const small=document.createElement("small");
+    small.textContent="زائر متصل";
+    info.append(name,small);
+
+    const button=document.createElement("button");
+    button.className="primary";
+    button.textContent="محادثة";
+    button.onclick=()=>startConversation(person.user_id);
+
+    card.append(info,button);
+    el("people").append(card);
+  });
+}
+
+async function findConversation(otherId){
+  const {data,error}=await db
+    .from("private_conversations")
+    .select("id,user_one,user_two,status")
+    .or(
+      `and(user_one.eq.${myUserId},user_two.eq.${otherId}),and(user_one.eq.${otherId},user_two.eq.${myUserId})`
+    );
+
+  if(error) throw error;
+  return data?.[0]||null;
+}
+
+async function startConversation(otherId){
+  try{
+    let conversation=await findConversation(otherId);
+
+    if(!conversation){
+      const {data,error}=await db
+        .from("private_conversations")
+        .insert({
+          user_one:myUserId,
+          user_two:otherId,
+          status:"pending"
+        })
+        .select("id,user_one,user_two,status")
+        .single();
+
+      if(error) throw error;
+      conversation=data;
+      alert("تصيفط طلب المحادثة.");
+    }
+
+    if(conversation.status==="accepted"){
+      await openConversation(conversation,otherId);
+    }else if(conversation.status==="pending"){
+      alert(
+        conversation.user_one===myUserId
+        ? "طلبك باقي كيتسنى القبول."
+        : "عندك طلب محادثة من هاد الزائر."
+      );
+    }else{
+      alert("هاد الطلب مرفوض.");
+    }
+
+    await refreshAll();
+  }catch(error){
+    alert("تعذر فتح المحادثة: "+error.message);
+  }
+}
+
+async function loadRequests(){
+  const {data,error}=await db
+    .from("private_conversations")
+    .select("id,user_one,user_two,status,created_at")
+    .eq("user_two",myUserId)
+    .eq("status","pending")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    el("requests").textContent="تعذر تحميل الطلبات: "+error.message;
+    return;
+  }
+
+  el("requests").replaceChildren();
+
+  if(!data?.length){
+    el("requests").textContent="ما كايناش طلبات جديدة.";
+    return;
+  }
+
+  const ids=data.map(c=>c.user_one);
+  const {data:profiles}=await db
+    .from("profiles")
+    .select("user_id,display_name")
+    .in("user_id",ids);
+
+  const names=Object.fromEntries(
+    (profiles||[]).map(p=>[p.user_id,p.display_name])
+  );
+
+  data.forEach(c=>{
+    const card=document.createElement("div");
+    card.className="person";
+
+    const info=document.createElement("strong");
+    info.textContent=names[c.user_one]||"زائر";
+
+    const actions=document.createElement("div");
+    actions.className="row";
+
+    const accept=document.createElement("button");
+    accept.className="primary";
+    accept.textContent="قبول";
+    accept.onclick=()=>respondRequest(c.id,"accepted");
+
+    const reject=document.createElement("button");
+    reject.className="secondary";
+    reject.textContent="رفض";
+    reject.onclick=()=>respondRequest(c.id,"rejected");
+
+    actions.append(accept,reject);
+    card.append(info,actions);
+    el("requests").append(card);
+  });
+}
+
+async function respondRequest(id,status){
+  const {error}=await db
+    .from("private_conversations")
+    .update({status})
+    .eq("id",id);
+
+  if(error){
+    alert("تعذر تحديث الطلب: "+error.message);
+    return;
+  }
+
+  await refreshAll();
+}
+
+async function loadChats(){
+  const {data,error}=await db
+    .from("private_conversations")
+    .select("id,user_one,user_two,status")
+    .eq("status","accepted")
+    .or(`user_one.eq.${myUserId},user_two.eq.${myUserId}`);
+
+  if(error){
+    el("chats").textContent="تعذر تحميل المحادثات: "+error.message;
+    return;
+  }
+
+  el("chats").replaceChildren();
+
+  if(!data?.length){
+    el("chats").textContent="ما عندك حتى محادثة مقبولة دابا.";
+    return;
+  }
+
+  const otherIds=data.map(c=>
+    c.user_one===myUserId?c.user_two:c.user_one
+  );
+
+  const {data:profiles}=await db
+    .from("profiles")
+    .select("user_id,display_name")
+    .in("user_id",otherIds);
+
+  const names=Object.fromEntries(
+    (profiles||[]).map(p=>[p.user_id,p.display_name])
+  );
+
+  data.forEach(c=>{
+    const otherId=c.user_one===myUserId?c.user_two:c.user_one;
+    const card=document.createElement("div");
+    card.className="person";
+
+    const name=document.createElement("strong");
+    name.textContent=names[otherId]||"زائر";
+
+    const button=document.createElement("button");
+    button.className="primary";
+    button.textContent="فتح المحادثة";
+    button.onclick=()=>openConversation(c,otherId);
+
+    card.append(name,button);
+    el("chats").append(card);
+  });
+}
+
+async function openConversation(conversation,otherId){
+  currentConversation=conversation.id;
+  currentOtherUser=otherId;
+
+  const {data:profile}=await db
+    .from("profiles")
+    .select("display_name")
+    .eq("user_id",otherId)
+    .maybeSingle();
+
+  el("chatTitle").textContent=
+    "محادثة مع "+(profile?.display_name||"زائر");
+
+  el("conversation").style.display="block";
+  el("conversation").scrollIntoView({behavior:"smooth"});
+  await loadPrivateMessages();
+
+  clearInterval(messageTimer);
+  messageTimer=setInterval(loadPrivateMessages,4000);
+}
+
+async function loadPrivateMessages(){
+  if(!currentConversation||loadingMessages) return;
+  loadingMessages=true;
+
+  const {data,error}=await db
+    .from("private_messages")
+    .select("id,sender_id,content,created_at")
+    .eq("conversation_id",currentConversation)
+    .order("created_at",{ascending:true})
     .limit(100);
 
+  loadingMessages=false;
+
   if(error){
-    posts.innerHTML = "";
-    messageStatus.textContent =
-      "تعذر تحميل الرسائل: " + error.message;
+    setStatus("chatStatus","تعذر تحميل الرسائل: "+error.message);
     return;
   }
 
-  posts.innerHTML = "";
+  const box=el("chatMessages");
+  box.replaceChildren();
 
-  if(!data || data.length === 0){
-    posts.textContent = "مرحبا بك! كن أول من يرسل رسالة.";
-    return;
-  }
+  (data||[]).forEach(message=>{
+    const bubble=document.createElement("div");
+    bubble.className="bubble"+
+      (message.sender_id===myUserId?" mine":"");
 
-  data.reverse().forEach(showMessage);
+    const content=document.createElement("div");
+    content.textContent=message.content;
+
+    const time=document.createElement("small");
+    time.textContent=new Date(message.created_at).toLocaleTimeString("ar-MA");
+
+    bubble.append(content,time);
+    box.append(bubble);
+  });
+
+  box.scrollTop=box.scrollHeight;
 }
 
-async function publish(){
-  if(!currentName){
-    joinGuest();
-    if(!currentName) return;
-  }
+async function sendMessage(){
+  if(!currentConversation) return;
 
-  const box = document.getElementById("postText");
-  const value = box.value.trim();
-  const sendButton = document.getElementById("sendButton");
+  const input=el("messageInput");
+  const content=input.value.trim();
 
-  if(!value){
-    messageStatus.textContent = "كتب الرسالة أولاً.";
-    return;
-  }
+  if(!content) return;
 
-  sendButton.disabled = true;
-  messageStatus.textContent = "جاري إرسال الرسالة...";
+  el("sendButton").disabled=true;
+  setStatus("chatStatus","جاري الإرسال...");
 
-  const {error} = await supabaseClient
-    .from("messages")
+  const {error}=await db
+    .from("private_messages")
     .insert({
-      username: currentName,
-      content: value
+      conversation_id:currentConversation,
+      content:content
     });
 
-  sendButton.disabled = false;
+  el("sendButton").disabled=false;
 
   if(error){
-    messageStatus.textContent =
-      "ما قدرناش نرسلو الرسالة: " + error.message;
+    setStatus("chatStatus","تعذر إرسال الرسالة: "+error.message);
     return;
   }
 
-  box.value = "";
-  messageStatus.textContent = "تم إرسال الرسالة بنجاح.";
+  input.value="";
+  setStatus("chatStatus","تم إرسال الرسالة.");
+  await loadPrivateMessages();
 }
 
-function connectRealtime(){
-  supabaseClient
-    .channel("chatmix-public-chat")
-    .on(
-      "postgres_changes",
-      {
-        event:"INSERT",
-        schema:"public",
-        table:"messages"
-      },
-      (payload) => {
-        showMessage(payload.new);
-      }
-    )
-    .subscribe((state) => {
-      if(state === "SUBSCRIBED"){
-        statusBox.textContent =
-          currentName
-          ? "مرحبا " + currentName + " · متصل بالدردشة"
-          : "متصل بالدردشة العامة";
-      }
-
-      if(state === "CHANNEL_ERROR"){
-        messageStatus.textContent =
-          "وقع مشكل في الاتصال المباشر. حاول تحديث الصفحة.";
-      }
-    });
+function closeConversation(){
+  currentConversation=null;
+  currentOtherUser=null;
+  clearInterval(messageTimer);
+  el("conversation").style.display="none";
 }
 
-updateName();
-loadMessages();
-connectRealtime();
+async function leaveChat(){
+  if(!confirm("واش بغيتي تخرج من ChatMix؟")) return;
+
+  clearInterval(refreshTimer);
+  clearInterval(messageTimer);
+  await db.auth.signOut();
+
+  location.reload();
+}
+
+el("messageInput").addEventListener("keydown",event=>{
+  if(event.key==="Enter"){
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+db.auth.getSession().then(({data})=>{
+  if(data.session){
+    el("nickname").value="";
+    setStatus("welcomeStatus","عندك جلسة سابقة. دخل بنفس الاسم المستعار.");
+  }
+});
 </script>
-
 </body>
 </html>
