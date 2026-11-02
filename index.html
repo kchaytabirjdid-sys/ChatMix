@@ -178,17 +178,23 @@ async function enterChat(){
       session = result.data.session;
     }
 
-    if(!session?.user?.id){
-      throw new Error("تعذر إنشاء هوية الزائر.");
-    }
+ if(!session?.user?.id){
+  throw new Error("تعذر إنشاء هوية الزائر.");
+}
 
-    myUserId = session.user.id;
+myUserId = session.user.id;
 
-    const {data:existing,error:profileError} = await db
-      .from("profiles")
-      .select("user_id,display_name,age_group")
-      .eq("user_id",myUserId)
-      .maybeSingle();
+console.log("ChatMix session:", {
+  userId: session.user.id,
+  role: session.user.role,
+  hasToken: !!session.access_token
+});
+
+const {data:existing,error:profileError} = await db
+  .from("profiles")
+  .select("*")
+  .eq("user_id",myUserId)
+  .maybeSingle();
 
     if(profileError) throw profileError;
 
