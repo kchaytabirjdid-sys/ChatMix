@@ -4,264 +4,309 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="ChatMix - مساحة للمحتوى والنقاش والترفيه">
-<title>ChatMix - عالمك في مكان واحد</title>
+<meta name="description" content="ChatMix - دردشة عامة للجميع">
+<title>ChatMix - الدردشة العامة</title>
+
 <style>
-:root{--bg:#0c1020;--panel:#151b30;--text:#f5f6ff;--muted:#aab2cb;--accent:#8b5cf6;--green:#22c7b8}
+:root{
+  --bg:#0c1020;
+  --panel:#151b30;
+  --text:#f5f6ff;
+  --muted:#aab2cb;
+  --accent:#8b5cf6;
+  --green:#22c7b8
+}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at top right,#25204c,#0c1020 55%);color:var(--text);font-family:Tahoma,Arial,sans-serif}
-button,input,textarea{font:inherit}
-.wrap{max-width:1100px;margin:auto;padding:18px}
-header{display:flex;align-items:center;justify-content:space-between;padding:15px 0 25px}
+body{
+  margin:0;
+  background:radial-gradient(circle at top right,#25204c,#0c1020 55%);
+  color:var(--text);
+  font-family:Tahoma,Arial,sans-serif
+}
+button,textarea{font:inherit}
+.wrap{max-width:950px;margin:auto;padding:18px}
+header{
+  display:flex;align-items:center;
+  justify-content:space-between;padding:15px 0 25px
+}
 .brand{font-size:30px;font-weight:bold;color:#9b80ff}
-button{border:0;border-radius:12px;padding:12px 17px;cursor:pointer;font-weight:bold}
+button{
+  border:0;border-radius:12px;padding:12px 17px;
+  cursor:pointer;font-weight:bold
+}
 .primary{background:var(--accent);color:white}
 .secondary{background:#293452;color:white}
-.hero{background:linear-gradient(120deg,#28214e,#182b49);border:1px solid #3b376b;border-radius:22px;padding:30px;margin-bottom:20px}
+.hero{
+  background:linear-gradient(120deg,#28214e,#182b49);
+  border:1px solid #3b376b;border-radius:22px;
+  padding:30px;margin-bottom:20px
+}
 h1{font-size:clamp(27px,5vw,40px);margin:0 0 12px}
+h2{font-size:19px;margin:0 0 15px}
 .sub{color:var(--muted);line-height:1.9}
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.grid{display:grid;grid-template-columns:250px 1fr;gap:18px}
-.panel{background:var(--panel);border:1px solid #2a3452;border-radius:18px;padding:18px}
-h2{font-size:19px;margin:0 0 15px}
-.room{display:block;width:100%;text-align:right;background:transparent;color:white;margin:5px 0}
-.room.active,.room:hover{background:#293452}
-textarea,input{width:100%;background:#0e1528;color:white;border:1px solid #35405f;border-radius:12px;padding:13px;margin:7px 0}
-textarea{min-height:95px;resize:vertical}
-.compose{margin-bottom:15px}
+.panel{
+  background:var(--panel);border:1px solid #2a3452;
+  border-radius:18px;padding:18px
+}
+textarea{
+  width:100%;background:#0e1528;color:white;
+  border:1px solid #35405f;border-radius:12px;
+  padding:13px;margin:7px 0;min-height:95px;
+  resize:vertical
+}
 .post{border-top:1px solid #2a3452;padding:16px 0}
 .post-head{display:flex;align-items:center;gap:10px}
-.avatar{width:38px;height:38px;background:#443576;border-radius:50%;display:grid;place-items:center}
-.post p{line-height:1.9;white-space:pre-wrap}
+.avatar{
+  width:38px;height:38px;background:#443576;
+  border-radius:50%;display:grid;place-items:center;
+  flex-shrink:0
+}
+.post p{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
 .meta,.muted{font-size:12px;color:var(--muted)}
-.small{background:#293452;color:white;padding:8px 12px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
-.card{background:#1c2540;padding:18px;border-radius:15px}
-.card p{color:var(--muted);line-height:1.8}
-.radio{margin-top:20px;padding:18px;background:#151b30;border:1px solid #35405f;border-radius:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-footer{text-align:center;color:var(--muted);padding:25px}
-.modal{display:none;position:fixed;inset:0;background:#000b;place-items:center;padding:15px}
-.modal.show{display:grid}
-.dialog{background:#171e34;padding:22px;border-radius:18px;width:min(420px,100%)}
 .notice{font-size:12px;color:var(--muted);line-height:1.8}
-@media(max-width:700px){.grid{grid-template-columns:1fr}header{gap:8px}.radio{align-items:flex-start;flex-direction:column}}
+.status{margin-top:12px;color:var(--green);font-size:13px}
+footer{text-align:center;color:var(--muted);padding:25px}
+@media(max-width:600px){
+  .wrap{padding:12px}
+  .hero{padding:20px}
+}
 </style>
 </head>
+
 <body>
 <div class="wrap">
+
 <header>
-<div class="brand">✦ ChatMix</div>
-<button class="secondary" onclick="openAuth()">دخول / حساب</button>
+  <div class="brand">✦ ChatMix</div>
+  <button class="secondary" onclick="joinGuest()">اختيار الاسم</button>
 </header>
 
 <section class="hero">
-<h1>مرحبا بك في ChatMix 👋</h1>
-<p class="sub">مساحة للنقاش ومشاركة الأفكار واكتشاف الاهتمامات المشتركة. مرحبا بالجميع في مجتمع يحترم الاختلاف.</p>
-<div class="actions">
-<button class="primary" onclick="joinGuest()">الدخول كزائر</button>
-<button class="secondary" onclick="document.getElementById('community').scrollIntoView()">اكتشف المجتمع</button>
-</div>
-<p class="muted" id="status">أنت تتصفح كزائر</p>
+  <h1>مرحبا بك في ChatMix 👋</h1>
+  <p class="sub">
+    دردشة عامة تجمع الجميع. شارك أفكارك وتعرف على أشخاص جدد
+    واحترم الآخرين.
+  </p>
+  <div class="actions">
+    <button class="primary" onclick="joinGuest()">الدخول كزائر</button>
+    <button class="secondary"
+      onclick="document.getElementById('chat').scrollIntoView()">
+      دخول الدردشة
+    </button>
+  </div>
+  <p class="muted" id="status">أنت تتصفح كزائر</p>
 </section>
 
-<div class="grid" id="community">
-<aside class="panel">
-<h2>الغرف العامة</h2>
-<button class="room active" onclick="selectRoom(this,'النقاش العام')">💬 النقاش العام</button>
-<button class="room" onclick="selectRoom(this,'الضحك والترفيه')">😂 الضحك والترفيه</button>
-<button class="room" onclick="selectRoom(this,'التقنية والألعاب')">🎮 التقنية والألعاب</button>
-<button class="room" onclick="selectRoom(this,'الفن والموسيقى')">🎵 الفن والموسيقى</button>
-<button class="room" onclick="selectRoom(this,'الرياضة')">⚽ الرياضة</button>
-<p class="notice">الغرف تجريبية في هذه النسخة. المشاركات لا تظهر للزوار الآخرين.</p>
-</aside>
+<main class="panel" id="chat">
+  <h2>💬 الدردشة العامة</h2>
 
-<main class="panel">
-<div class="compose">
-<h2 id="roomTitle">النقاش العام</h2>
-<textarea id="postText" maxlength="1000" placeholder="شنو بغيتي تشارك مع الناس؟"></textarea>
-<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
-<span class="muted" id="who">اختار اسماً مستعاراً للبدء</span>
-<button class="primary" onclick="publish()">نشر المشاركة</button>
-</div>
-</div>
-<div id="posts">
-<article class="post">
-<div class="post-head"><div class="avatar">✦</div><div><strong>فريق ChatMix</strong><div class="meta">ترحيب</div></div></div>
-<p>مرحبا بكم في ChatMix! شاركونا أفكاركم وتناقشوا باحترام. نتمنى لكم وقتاً ممتعاً.</p>
-<button class="small" onclick="like(this)">♡ إعجاب</button>
-</article>
-</div>
+  <div class="compose">
+    <textarea id="postText" maxlength="1000"
+      placeholder="شنو بغيتي تقول للمشاركين؟"></textarea>
+
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+      <span class="muted" id="who">اختار اسماً مستعاراً للبدء</span>
+      <button class="primary" id="sendButton" onclick="publish()">
+        إرسال الرسالة
+      </button>
+    </div>
+    <p class="notice" id="messageStatus"></p>
+  </div>
+
+  <div id="posts">
+    <p class="muted">جاري تحميل الرسائل...</p>
+  </div>
 </main>
-</div>
-
-<section class="panel" style="margin-top:22px">
-<h2>اكتشف ChatMix</h2>
-<div class="cards">
-<div class="card"><h3>🎬 الترفيه</h3><p>قصص وأفكار ومحتوى ممتع.</p></div>
-<div class="card"><h3>💡 المعرفة</h3><p>معلومات مفيدة واكتشافات جديدة.</p></div>
-<div class="card"><h3>🌍 العالم</h3><p>مواضيع متنوعة عن الحياة والثقافة.</p></div>
-<div class="card"><h3>📱 التكنولوجيا</h3><p>التطبيقات والابتكارات الرقمية.</p></div>
-</div>
-</section>
-
-<section class="radio">
-<div><strong>📻 راديو ChatMix</strong><p class="muted">قريباً: محتوى صوتي مرخص.</p></div>
-<button class="secondary" onclick="alert('سيتم إضافة محطة صوتية مرخصة لاحقاً.')">قريباً</button>
-</section>
 
 <section class="panel" style="margin-top:20px">
-<h2>من نحن</h2>
-<p class="sub">ChatMix مشروع رقمي يجمع بين المحتوى والترفيه والنقاش الإيجابي.</p>
-<h2>الخصوصية وقواعد المجتمع</h2>
-<p class="sub">احترم الآخرين، ولا تنشر كلمات المرور أو المعلومات الشخصية أو محتوى ينتهك حقوق الآخرين. هذه نسخة تجريبية وليست منصة دردشة متصلة.</p>
-<h2>تواصل معنا</h2>
-<p class="sub">يمكن تطوير نموذج التواصل وربطه ببريد إلكتروني في مرحلة لاحقة.</p>
+  <h2>قواعد ChatMix</h2>
+  <p class="sub">
+    احترم المشاركين، ولا تنشر كلمات المرور أو المعلومات الشخصية
+    أو الروابط المشبوهة.
+  </p>
 </section>
 
 <footer>© 2026 ChatMix - جميع الحقوق محفوظة</footer>
 </div>
 
-<div class="modal" id="authModal" onclick="if(event.target===this)closeAuth()">
-  <div class="dialog">
-    <h2>حساب ChatMix</h2>
-    <p class="sub">إنشاء حساب جديد أو الدخول لحسابك</p>
-
-    <input id="authEmail" type="email" placeholder="البريد الإلكتروني">
-    <input id="authPassword" type="password" placeholder="كلمة المرور">
-
-    <button class="primary" onclick="signUp()">إنشاء حساب</button>
-    <button class="secondary" onclick="signIn()">تسجيل الدخول</button>
-
-    <p id="authMessage" class="notice"></p>
-    <button class="secondary" onclick="closeAuth()">إغلاق</button>
-  </div>
-</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-  const SUPABASE_URL = "https://cnhyxbrqxwrwlrzpxgem.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_0COEsiw0kZ3KbHg0sgtZaw_RKUHAXHk";
+const SUPABASE_URL =
+  "https://cnhyxbrqxwrwlrzpxgem.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_0COEsiw0kZ3KbHg0sgtZaw_RKUHAXHk";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
-let currentName='';
-let currentRoom='النقاش العام';
+
+let currentName = sessionStorage.getItem("chatmix_name") || "";
+const displayedMessages = new Set();
+
+const posts = document.getElementById("posts");
+const statusBox = document.getElementById("status");
+const whoBox = document.getElementById("who");
+const messageStatus = document.getElementById("messageStatus");
+
+function updateName(){
+  if(currentName){
+    statusBox.textContent = "مرحبا بك " + currentName;
+    whoBox.textContent = "كتشارك باسم " + currentName;
+  }
+}
 
 function joinGuest(){
-let name=prompt('اختار اسماً مستعاراً (3 أحرف على الأقل):');
-if(!name||name.trim().length<3){alert('الاسم خاصو يكون 3 أحرف على الأقل.');return;}
-currentName=name.trim().slice(0,24);
-document.getElementById('status').textContent='مرحبا '+currentName;
-document.getElementById('who').textContent='كتشارك باسم '+currentName;
-}
+  const name = prompt("اختار اسماً مستعاراً (3 أحرف على الأقل):");
 
-function publish(){
-if(!currentName){joinGuest();if(!currentName)return;}
-let box=document.getElementById('postText');
-let value=box.value.trim();
-if(!value){alert('كتب المشاركة أولاً.');return;}
-let article=document.createElement('article');
-article.className='post';
-let head=document.createElement('div');
-head.className='post-head';
-let avatar=document.createElement('div');
-avatar.className='avatar';
-avatar.textContent='🙂';
-let info=document.createElement('div');
-let name=document.createElement('strong');
-name.textContent=currentName;
-let meta=document.createElement('div');
-meta.className='meta';
-meta.textContent=currentRoom+' · الآن';
-info.append(name,meta);
-head.append(avatar,info);
-let p=document.createElement('p');
-p.textContent=value;
-let btn=document.createElement('button');
-btn.className='small';
-btn.textContent='♡ إعجاب';
-btn.onclick=function(){like(btn)};
-article.append(head,p,btn);
-document.getElementById('posts').prepend(article);
-box.value='';
-}
+  if(name === null) return;
 
-function selectRoom(btn,name){
-document.querySelectorAll('.room').forEach(x=>x.classList.remove('active'));
-btn.classList.add('active');
-currentRoom=name;
-document.getElementById('roomTitle').textContent=name;
-}
+  const cleanName = name.trim();
 
-function like(btn){
-btn.textContent=btn.textContent.startsWith('♡')?'♥ أعجبني':'♡ إعجاب';
-}
-
-function openAuth(){
-  document.getElementById('authModal').classList.add('show');
-}
-
-function closeAuth(){
-  document.getElementById('authModal').classList.remove('show');
-}
-
-async function signUp(){
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const message = document.getElementById('authMessage');
-
-  if(!email || password.length < 6){
-    message.textContent = 'Enter a valid email and a password of at least 6 characters.';
+  if(cleanName.length < 3){
+    alert("الاسم خاصو يكون 3 أحرف على الأقل.");
     return;
   }
 
-  message.textContent = 'Creating your account...';
+  currentName = cleanName.slice(0,24);
+  sessionStorage.setItem("chatmix_name",currentName);
+  updateName();
+}
 
-  const {data,error} = await supabaseClient.auth.signUp({
-    email: email,
-    password: password
-  });
+function showMessage(message){
+  const id = String(message.id);
+
+  if(displayedMessages.has(id)) return;
+  displayedMessages.add(id);
+
+  const article = document.createElement("article");
+  article.className = "post";
+
+  const head = document.createElement("div");
+  head.className = "post-head";
+
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = "🙂";
+
+  const info = document.createElement("div");
+
+  const name = document.createElement("strong");
+  name.textContent = message.username;
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+
+  const date = new Date(message.created_at);
+  meta.textContent = date.toLocaleString("ar-MA");
+
+  info.append(name,meta);
+  head.append(avatar,info);
+
+  const content = document.createElement("p");
+  content.textContent = message.content;
+
+  article.append(head,content);
+  posts.appendChild(article);
+}
+
+async function loadMessages(){
+  const {data,error} = await supabaseClient
+    .from("messages")
+    .select("id,username,content,created_at")
+    .order("created_at",{ascending:false})
+    .limit(100);
 
   if(error){
-    message.textContent = error.message;
+    posts.innerHTML = "";
+    messageStatus.textContent =
+      "تعذر تحميل الرسائل: " + error.message;
     return;
   }
 
-  message.textContent = data.session
-    ? 'Account created successfully!'
-    : 'Check your email to confirm your account.';
+  posts.innerHTML = "";
+
+  if(!data || data.length === 0){
+    posts.textContent = "مرحبا بك! كن أول من يرسل رسالة.";
+    return;
+  }
+
+  data.reverse().forEach(showMessage);
 }
 
-async function signIn(){
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const message = document.getElementById('authMessage');
+async function publish(){
+  if(!currentName){
+    joinGuest();
+    if(!currentName) return;
+  }
 
-  if(!email || !password){
-    message.textContent = 'Enter your email and password.';
+  const box = document.getElementById("postText");
+  const value = box.value.trim();
+  const sendButton = document.getElementById("sendButton");
+
+  if(!value){
+    messageStatus.textContent = "كتب الرسالة أولاً.";
     return;
   }
 
-  message.textContent = 'Signing in...';
+  sendButton.disabled = true;
+  messageStatus.textContent = "جاري إرسال الرسالة...";
 
-  const {data,error} = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
+  const {error} = await supabaseClient
+    .from("messages")
+    .insert({
+      username: currentName,
+      content: value
+    });
+
+  sendButton.disabled = false;
 
   if(error){
-    message.textContent = error.message;
+    messageStatus.textContent =
+      "ما قدرناش نرسلو الرسالة: " + error.message;
     return;
   }
 
-  currentName = data.user.email.split('@')[0];
-
-  document.getElementById('status').textContent = 'Welcome ' + currentName;
-  document.getElementById('who').textContent = 'Logged in as ' + currentName;
-
-  message.textContent = 'Login successful!';
+  box.value = "";
+  messageStatus.textContent = "تم إرسال الرسالة بنجاح.";
 }
+
+function connectRealtime(){
+  supabaseClient
+    .channel("chatmix-public-chat")
+    .on(
+      "postgres_changes",
+      {
+        event:"INSERT",
+        schema:"public",
+        table:"messages"
+      },
+      (payload) => {
+        showMessage(payload.new);
+      }
+    )
+    .subscribe((state) => {
+      if(state === "SUBSCRIBED"){
+        statusBox.textContent =
+          currentName
+          ? "مرحبا " + currentName + " · متصل بالدردشة"
+          : "متصل بالدردشة العامة";
+      }
+
+      if(state === "CHANNEL_ERROR"){
+        messageStatus.textContent =
+          "وقع مشكل في الاتصال المباشر. حاول تحديث الصفحة.";
+      }
+    });
+}
+
+updateName();
+loadMessages();
+connectRealtime();
 </script>
+
 </body>
 </html>
