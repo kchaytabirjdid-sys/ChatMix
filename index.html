@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ChatMix - مساحة للمحتوى والنقاش والترفيه">
+<title>ChatMix - عالمك في مكان واحد</title>
+<style>
+:root{--bg:#0c1020;--panel:#151b30;--text:#f5f6ff;--muted:#aab2cb;--accent:#8b5cf6;--green:#22c7b8}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top right,#25204c,#0c1020 55%);color:var(--text);font-family:Tahoma,Arial,sans-serif}
+button,input,textarea{font:inherit}
+.wrap{max-width:1100px;margin:auto;padding:18px}
+header{display:flex;align-items:center;justify-content:space-between;padding:15px 0 25px}
+.brand{font-size:30px;font-weight:bold;color:#9b80ff}
+button{border:0;border-radius:12px;padding:12px 17px;cursor:pointer;font-weight:bold}
+.primary{background:var(--accent);color:white}
+.secondary{background:#293452;color:white}
+.hero{background:linear-gradient(120deg,#28214e,#182b49);border:1px solid #3b376b;border-radius:22px;padding:30px;margin-bottom:20px}
+h1{font-size:clamp(27px,5vw,40px);margin:0 0 12px}
+.sub{color:var(--muted);line-height:1.9}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.grid{display:grid;grid-template-columns:250px 1fr;gap:18px}
+.panel{background:var(--panel);border:1px solid #2a3452;border-radius:18px;padding:18px}
+h2{font-size:19px;margin:0 0 15px}
+.room{display:block;width:100%;text-align:right;background:transparent;color:white;margin:5px 0}
+.room.active,.room:hover{background:#293452}
+textarea,input{width:100%;background:#0e1528;color:white;border:1px solid #35405f;border-radius:12px;padding:13px;margin:7px 0}
+textarea{min-height:95px;resize:vertical}
+.compose{margin-bottom:15px}
+.post{border-top:1px solid #2a3452;padding:16px 0}
+.post-head{display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;background:#443576;border-radius:50%;display:grid;place-items:center}
+.post p{line-height:1.9;white-space:pre-wrap}
+.meta,.muted{font-size:12px;color:var(--muted)}
+.small{background:#293452;color:white;padding:8px 12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
+.card{background:#1c2540;padding:18px;border-radius:15px}
+.card p{color:var(--muted);line-height:1.8}
+.radio{margin-top:20px;padding:18px;background:#151b30;border:1px solid #35405f;border-radius:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+footer{text-align:center;color:var(--muted);padding:25px}
+.modal{display:none;position:fixed;inset:0;background:#000b;place-items:center;padding:15px}
+.modal.show{display:grid}
+.dialog{background:#171e34;padding:22px;border-radius:18px;width:min(420px,100%)}
+.notice{font-size:12px;color:var(--muted);line-height:1.8}
+@media(max-width:700px){.grid{grid-template-columns:1fr}header{gap:8px}.radio{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="brand">✦ ChatMix</div>
+<button class="secondary" onclick="openAuth()">دخول / حساب</button>
+</header>
+
+<section class="hero">
+<h1>مرحبا بك في ChatMix 👋</h1>
+<p class="sub">مساحة للنقاش ومشاركة الأفكار واكتشاف الاهتمامات المشتركة. مرحبا بالجميع في مجتمع يحترم الاختلاف.</p>
+<div class="actions">
+<button class="primary" onclick="joinGuest()">الدخول كزائر</button>
+<button class="secondary" onclick="document.getElementById('community').scrollIntoView()">اكتشف المجتمع</button>
+</div>
+<p class="muted" id="status">أنت تتصفح كزائر</p>
+</section>
+
+<div class="grid" id="community">
+<aside class="panel">
+<h2>الغرف العامة</h2>
+<button class="room active" onclick="selectRoom(this,'النقاش العام')">💬 النقاش العام</button>
+<button class="room" onclick="selectRoom(this,'الضحك والترفيه')">😂 الضحك والترفيه</button>
+<button class="room" onclick="selectRoom(this,'التقنية والألعاب')">🎮 التقنية والألعاب</button>
+<button class="room" onclick="selectRoom(this,'الفن والموسيقى')">🎵 الفن والموسيقى</button>
+<button class="room" onclick="selectRoom(this,'الرياضة')">⚽ الرياضة</button>
+<p class="notice">الغرف تجريبية في هذه النسخة. المشاركات لا تظهر للزوار الآخرين.</p>
+</aside>
+
+<main class="panel">
+<div class="compose">
+<h2 id="roomTitle">النقاش العام</h2>
+<textarea id="postText" maxlength="1000" placeholder="شنو بغيتي تشارك مع الناس؟"></textarea>
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+<span class="muted" id="who">اختار اسماً مستعاراً للبدء</span>
+<button class="primary" onclick="publish()">نشر المشاركة</button>
+</div>
+</div>
+<div id="posts">
+<article class="post">
+<div class="post-head"><div class="avatar">✦</div><div><strong>فريق ChatMix</strong><div class="meta">ترحيب</div></div></div>
+<p>مرحبا بكم في ChatMix! شاركونا أفكاركم وتناقشوا باحترام. نتمنى لكم وقتاً ممتعاً.</p>
+<button class="small" onclick="like(this)">♡ إعجاب</button>
+</article>
+</div>
+</main>
+</div>
+
+<section class="panel" style="margin-top:22px">
+<h2>اكتشف ChatMix</h2>
+<div class="cards">
+<div class="card"><h3>🎬 الترفيه</h3><p>قصص وأفكار ومحتوى ممتع.</p></div>
+<div class="card"><h3>💡 المعرفة</h3><p>معلومات مفيدة واكتشافات جديدة.</p></div>
+<div class="card"><h3>🌍 العالم</h3><p>مواضيع متنوعة عن الحياة والثقافة.</p></div>
+<div class="card"><h3>📱 التكنولوجيا</h3><p>التطبيقات والابتكارات الرقمية.</p></div>
+</div>
+</section>
+
+<section class="radio">
+<div><strong>📻 راديو ChatMix</strong><p class="muted">قريباً: محتوى صوتي مرخص.</p></div>
+<button class="secondary" onclick="alert('سيتم إضافة محطة صوتية مرخصة لاحقاً.')">قريباً</button>
+</section>
+
+<section class="panel" style="margin-top:20px">
+<h2>من نحن</h2>
+<p class="sub">ChatMix مشروع رقمي يجمع بين المحتوى والترفيه والنقاش الإيجابي.</p>
+<h2>الخصوصية وقواعد المجتمع</h2>
+<p class="sub">احترم الآخرين، ولا تنشر كلمات المرور أو المعلومات الشخصية أو محتوى ينتهك حقوق الآخرين. هذه نسخة تجريبية وليست منصة دردشة متصلة.</p>
+<h2>تواصل معنا</h2>
+<p class="sub">يمكن تطوير نموذج التواصل وربطه ببريد إلكتروني في مرحلة لاحقة.</p>
+</section>
+
+<footer>© 2026 ChatMix - جميع الحقوق محفوظة</footer>
+</div>
+
+<div class="modal" id="authModal" onclick="if(event.target===this)closeAuth()">
+<div class="dialog">
+<h2>حساب ChatMix</h2>
+<p class="sub">واجهة تجريبية فقط، التسجيل الحقيقي غير مفعّل.</p>
+<input type="email" placeholder="البريد الإلكتروني">
+<input type="password" placeholder="كلمة المرور">
+<p class="notice">لا تدخل معلوماتك الحقيقية هنا. لا توجد خدمة تسجيل مرتبطة بالموقع حالياً.</p>
+<button class="secondary" onclick="closeAuth()">إغلاق</button>
+</div>
+</div>
+
+<script>
+let currentName='';
+let currentRoom='النقاش العام';
+
+function joinGuest(){
+let name=prompt('اختار اسماً مستعاراً (3 أحرف على الأقل):');
+if(!name||name.trim().length<3){alert('الاسم خاصو يكون 3 أحرف على الأقل.');return;}
+currentName=name.trim().slice(0,24);
+document.getElementById('status').textContent='مرحبا '+currentName;
+document.getElementById('who').textContent='كتشارك باسم '+currentName;
+}
+
+function publish(){
+if(!currentName){joinGuest();if(!currentName)return;}
+let box=document.getElementById('postText');
+let value=box.value.trim();
+if(!value){alert('كتب المشاركة أولاً.');return;}
+let article=document.createElement('article');
+article.className='post';
+let head=document.createElement('div');
+head.className='post-head';
+let avatar=document.createElement('div');
+avatar.className='avatar';
+avatar.textContent='🙂';
+let info=document.createElement('div');
+let name=document.createElement('strong');
+name.textContent=currentName;
+let meta=document.createElement('div');
+meta.className='meta';
+meta.textContent=currentRoom+' · الآن';
+info.append(name,meta);
+head.append(avatar,info);
+let p=document.createElement('p');
+p.textContent=value;
+let btn=document.createElement('button');
+btn.className='small';
+btn.textContent='♡ إعجاب';
+btn.onclick=function(){like(btn)};
+article.append(head,p,btn);
+document.getElementById('posts').prepend(article);
+box.value='';
+}
+
+function selectRoom(btn,name){
+document.querySelectorAll('.room').forEach(x=>x.classList.remove('active'));
+btn.classList.add('active');
+currentRoom=name;
+document.getElementById('roomTitle').textContent=name;
+}
+
+function like(btn){
+btn.textContent=btn.textContent.startsWith('♡')?'♥ أعجبني':'♡ إعجاب';
+}
+
+function openAuth(){
+document.getElementById('authModal').classList.add('show');
+}
+function closeAuth(){
+document.getElementById('authModal').classList.remove('show');
+}
+</script>
+</body>
+</html>
