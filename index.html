@@ -7,15 +7,9 @@
 <meta name="description" content="ChatMix - دردشة خاصة">
 <title>ChatMix</title>
 <style>
-:root{
-  --bg:#0c1020;--panel:#151b30;--text:#f5f6ff;
-  --muted:#aab2cb;--accent:#8b5cf6;--green:#22c7b8;
-}
+:root{--bg:#0c1020;--panel:#151b30;--text:#f5f6ff;--muted:#aab2cb;--accent:#8b5cf6;--green:#22c7b8}
 *{box-sizing:border-box}
-body{
-  margin:0;background:radial-gradient(circle at top right,#25204c,#0c1020 55%);
-  color:var(--text);font-family:Tahoma,Arial,sans-serif
-}
+body{margin:0;background:radial-gradient(circle at top right,#25204c,#0c1020 55%);color:var(--text);font-family:Tahoma,Arial,sans-serif}
 button,input{font:inherit}
 .wrap{max-width:900px;margin:auto;padding:15px}
 header{display:flex;justify-content:space-between;align-items:center;padding:15px 0 22px}
@@ -31,31 +25,17 @@ button:disabled{opacity:.5}
 .primary{background:var(--accent);color:white}
 .secondary{background:#293452;color:white}
 .danger{background:#512b3a;color:#ffd9df}
-input{
-  width:100%;background:#0e1528;color:white;border:1px solid #35405f;
-  border-radius:11px;padding:13px;margin:8px 0
-}
+input{width:100%;background:#0e1528;color:white;border:1px solid #35405f;border-radius:11px;padding:13px;margin:8px 0}
 .row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .row button{flex-shrink:0}
 #app{display:none}
 #people,#requests,#chats{display:grid;gap:9px}
-.person{
-  background:#10182d;border:1px solid #2a3452;border-radius:13px;
-  padding:12px;display:flex;justify-content:space-between;
-  align-items:center;gap:10px
-}
+.person{background:#10182d;border:1px solid #2a3452;border-radius:13px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .person strong{overflow-wrap:anywhere}
 .person small{display:block;color:var(--muted);margin-top:5px}
 #conversation{display:none}
-#chatMessages{
-  min-height:180px;max-height:390px;overflow-y:auto;
-  background:#0e1528;border-radius:13px;padding:12px;margin:12px 0
-}
-.bubble{
-  max-width:85%;padding:10px 12px;margin:8px 0;
-  border-radius:13px;background:#293452;overflow-wrap:anywhere;
-  white-space:pre-wrap
-}
+#chatMessages{min-height:180px;max-height:390px;overflow-y:auto;background:#0e1528;border-radius:13px;padding:12px;margin:12px 0}
+.bubble{max-width:85%;padding:10px 12px;margin:8px 0;border-radius:13px;background:#293452;overflow-wrap:anywhere;white-space:pre-wrap}
 .bubble.mine{background:#49368a;margin-right:auto}
 .bubble small{display:block;color:#c6c9df;font-size:10px;margin-top:5px}
 .status{color:var(--green);font-size:13px;line-height:1.8}
@@ -65,7 +45,6 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
 </head>
 <body>
 <div class="wrap">
-
 <header>
   <div class="brand">✦ ChatMix</div>
   <button class="secondary" id="logoutButton" style="display:none" onclick="leaveChat()">خروج</button>
@@ -122,141 +101,154 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
   <h2>قواعد ChatMix</h2>
   <p class="notice">
     احترم الآخرين. ما تشاركش كلمات المرور أو رقم الهاتف أو العنوان.
-    ما تضغطش على الروابط المشبوهة.
+    ما تضغطش على الروابط المشبوهة. تقدر ترفض أي طلب محادثة ما مرتاحش ليه.
   </p>
 </section>
-
 <footer>© 2026 ChatMix</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL =
-  "https://cnhyxbrqxwrwlrzpxgem.supabase.co";
+const SUPABASE_URL="https://cnhyxbrqxwrwlrzpxgem.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_0COEsiw0kZ3KbHg0sgtZaw_RKUHAXHk";
 
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_0COEsiw0kZ3KbHg0sgtZaw_RKUHAXHk";
-
-const db = window.supabase.createClient(
+const db=window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
 
-const el = id => document.getElementById(id);
-
-let myUserId = null;
-let myProfile = null;
-let currentConversation = null;
-let currentOtherUser = null;
-let refreshTimer = null;
-let messageTimer = null;
-let loadingMessages = false;
+const el=id=>document.getElementById(id);
+let myUserId=null;
+let myProfile=null;
+let currentConversation=null;
+let refreshTimer=null;
+let messageTimer=null;
+let loadingMessages=false;
 
 function setStatus(id,text){
-  el(id).textContent = text;
+  el(id).textContent=text;
 }
 
 async function enterChat(){
-  const name = el("nickname").value.trim();
-  const button = el("enterButton");
+  const name=el("nickname").value.trim();
+  const button=el("enterButton");
 
-  if(name.length < 3 || name.length > 24){
+  if(name.length<3||name.length>24){
     setStatus("welcomeStatus","الاسم خاصو يكون بين 3 و24 حرف.");
     return;
   }
 
-  button.disabled = true;
+  button.disabled=true;
   setStatus("welcomeStatus","جاري الدخول...");
 
   try{
-    let {data:{session},error} = await db.auth.getSession();
-    if(error) throw error;
+    let {data:{session},error}=await db.auth.getSession();
+    if(error)throw error;
 
     if(!session){
-      const result = await db.auth.signInAnonymously();
-      if(result.error) throw result.error;
-      session = result.data.session;
+      const result=await db.auth.signInAnonymously();
+      if(result.error)throw result.error;
+      session=result.data.session;
     }
 
- if(!session?.user?.id){
-  throw new Error("تعذر إنشاء هوية الزائر.");
-}
+    if(!session?.user?.id||!session.access_token){
+      throw new Error("تعذر إنشاء جلسة دخول صالحة.");
+    }
 
-myUserId = session.user.id;
+    myUserId=session.user.id;
 
-console.log("ChatMix session:", {
-  userId: session.user.id,
-  role: session.user.role,
-  hasToken: !!session.access_token
-});
+    console.log("ChatMix session:",{
+      authenticated:!!session,
+      hasToken:!!session.access_token,
+      role:session.user.role
+    });
 
-const {data:existing,error:profileError} = await db
-  .from("profiles")
-  .select("*")
-  .eq("user_id",myUserId)
-  .maybeSingle();
+    const {data:existing,error:profileError}=await db
+      .from("profiles")
+      .select("*")
+      .eq("user_id",myUserId)
+      .maybeSingle();
 
-    if(profileError) throw profileError;
+    if(profileError)throw profileError;
 
     if(existing){
-      myProfile = existing;
+      myProfile=existing;
+
+      if(existing.display_name!==name){
+        const {data:updated,error:updateError}=await db
+          .from("profiles")
+          .update({display_name:name})
+          .eq("user_id",myUserId)
+          .select("*")
+          .single();
+
+        if(updateError)throw updateError;
+        myProfile=updated;
+      }
     }else{
-      const {data:created,error:createError} = await db
+      const {data:created,error:createError}=await db
         .from("profiles")
         .insert({
           user_id:myUserId,
-          display_name:name.slice(0,24),
+          display_name:name,
           age_group:"unspecified"
         })
-        .select("user_id,display_name,age_group")
+        .select("*")
         .single();
 
-      if(createError) throw createError;
-      myProfile = created;
+      if(createError)throw createError;
+      myProfile=created;
     }
 
-    el("welcome").style.display = "none";
-    el("app").style.display = "block";
-    el("logoutButton").style.display = "inline-block";
-    el("myName").textContent = myProfile.display_name;
+    el("welcome").style.display="none";
+    el("app").style.display="block";
+    el("logoutButton").style.display="inline-block";
+    el("myName").textContent=myProfile.display_name;
 
     await updatePresence();
     await refreshAll();
 
     clearInterval(refreshTimer);
-    refreshTimer = setInterval(async()=>{
+    refreshTimer=setInterval(async()=>{
       await updatePresence();
       await refreshAll();
     },30000);
 
   }catch(error){
-    setStatus("welcomeStatus","وقع مشكل: "+error.message);
+    let debugSession=null;
+    try{
+      const result=await db.auth.getSession();
+      debugSession=result.data?.session;
+    }catch(e){}
+
+    setStatus("welcomeStatus",
+      "الخطأ: "+error.message+
+      " | الجلسة: "+!!debugSession+
+      " | JWT: "+!!debugSession?.access_token+
+      " | تطابق الحساب: "+(debugSession?.user?.id===myUserId)
+    );
   }finally{
-    button.disabled = false;
+    button.disabled=false;
   }
 }
 
 async function updatePresence(){
-  if(!myUserId) return;
+  if(!myUserId)return;
 
-  const {error} = await db
+  const {error}=await db
     .from("profiles")
     .update({last_seen:new Date().toISOString()})
     .eq("user_id",myUserId);
 
-  setStatus("appStatus",error ? "تعذر تحديث الاتصال" : "متصل");
+  setStatus("appStatus",error?"تعذر تحديث الاتصال":"متصل");
 }
 
 async function refreshAll(){
-  await Promise.all([
-    loadPeople(),
-    loadRequests(),
-    loadChats()
-  ]);
+  await Promise.all([loadPeople(),loadRequests(),loadChats()]);
 }
 
 async function loadPeople(){
-  const {data,error} = await db
+  const {data,error}=await db
     .from("profiles")
     .select("user_id,display_name,last_seen")
     .neq("user_id",myUserId)
@@ -264,13 +256,13 @@ async function loadPeople(){
     .limit(50);
 
   if(error){
-    el("people").textContent = "تعذر تحميل الزوار: "+error.message;
+    el("people").textContent="تعذر تحميل الزوار: "+error.message;
     return;
   }
 
-  const cutoff = Date.now()-5*60*1000;
-  const people = (data||[]).filter(p=>
-    new Date(p.last_seen).getTime()>cutoff
+  const cutoff=Date.now()-5*60*1000;
+  const people=(data||[]).filter(p=>
+    p.last_seen&&new Date(p.last_seen).getTime()>cutoff
   );
 
   el("people").replaceChildren();
@@ -310,7 +302,7 @@ async function findConversation(otherId){
       `and(user_one.eq.${myUserId},user_two.eq.${otherId}),and(user_one.eq.${otherId},user_two.eq.${myUserId})`
     );
 
-  if(error) throw error;
+  if(error)throw error;
   return data?.[0]||null;
 }
 
@@ -329,7 +321,7 @@ async function startConversation(otherId){
         .select("id,user_one,user_two,status")
         .single();
 
-      if(error) throw error;
+      if(error)throw error;
       conversation=data;
       alert("تصيفط طلب المحادثة.");
     }
@@ -339,8 +331,8 @@ async function startConversation(otherId){
     }else if(conversation.status==="pending"){
       alert(
         conversation.user_one===myUserId
-        ? "طلبك باقي كيتسنى القبول."
-        : "عندك طلب محادثة من هاد الزائر."
+        ?"طلبك باقي كيتسنى القبول."
+        :"عندك طلب محادثة من هاد الزائر."
       );
     }else{
       alert("هاد الطلب مرفوض.");
@@ -373,10 +365,15 @@ async function loadRequests(){
   }
 
   const ids=data.map(c=>c.user_one);
-  const {data:profiles}=await db
+  const {data:profiles,error:profileError}=await db
     .from("profiles")
     .select("user_id,display_name")
     .in("user_id",ids);
+
+  if(profileError){
+    el("requests").textContent="تعذر تحميل أسماء المرسلين.";
+    return;
+  }
 
   const names=Object.fromEntries(
     (profiles||[]).map(p=>[p.user_id,p.display_name])
@@ -474,13 +471,17 @@ async function loadChats(){
 
 async function openConversation(conversation,otherId){
   currentConversation=conversation.id;
-  currentOtherUser=otherId;
 
-  const {data:profile}=await db
+  const {data:profile,error}=await db
     .from("profiles")
     .select("display_name")
     .eq("user_id",otherId)
     .maybeSingle();
+
+  if(error){
+    setStatus("chatStatus","تعذر تحميل اسم الزائر.");
+    return;
+  }
 
   el("chatTitle").textContent=
     "محادثة مع "+(profile?.display_name||"زائر");
@@ -494,88 +495,89 @@ async function openConversation(conversation,otherId){
 }
 
 async function loadPrivateMessages(){
-  if(!currentConversation||loadingMessages) return;
+  if(!currentConversation||loadingMessages)return;
   loadingMessages=true;
 
-  const {data,error}=await db
-    .from("private_messages")
-    .select("id,sender_id,content,created_at")
-    .eq("conversation_id",currentConversation)
-    .order("created_at",{ascending:true})
-    .limit(100);
+  try{
+    const {data,error}=await db
+      .from("private_messages")
+      .select("id,sender_id,content,created_at")
+      .eq("conversation_id",currentConversation)
+      .order("created_at",{ascending:true})
+      .limit(100);
 
-  loadingMessages=false;
+    if(error)throw error;
 
-  if(error){
+    const box=el("chatMessages");
+    box.replaceChildren();
+
+    (data||[]).forEach(message=>{
+      const bubble=document.createElement("div");
+      bubble.className="bubble"+
+        (message.sender_id===myUserId?" mine":"");
+
+      const content=document.createElement("div");
+      content.textContent=message.content;
+
+      const time=document.createElement("small");
+      time.textContent=new Date(message.created_at)
+        .toLocaleTimeString("ar-MA");
+
+      bubble.append(content,time);
+      box.append(bubble);
+    });
+
+    box.scrollTop=box.scrollHeight;
+    setStatus("chatStatus","");
+  }catch(error){
     setStatus("chatStatus","تعذر تحميل الرسائل: "+error.message);
-    return;
+  }finally{
+    loadingMessages=false;
   }
-
-  const box=el("chatMessages");
-  box.replaceChildren();
-
-  (data||[]).forEach(message=>{
-    const bubble=document.createElement("div");
-    bubble.className="bubble"+
-      (message.sender_id===myUserId?" mine":"");
-
-    const content=document.createElement("div");
-    content.textContent=message.content;
-
-    const time=document.createElement("small");
-    time.textContent=new Date(message.created_at).toLocaleTimeString("ar-MA");
-
-    bubble.append(content,time);
-    box.append(bubble);
-  });
-
-  box.scrollTop=box.scrollHeight;
 }
 
 async function sendMessage(){
-  if(!currentConversation) return;
+  if(!currentConversation)return;
 
   const input=el("messageInput");
   const content=input.value.trim();
-
-  if(!content) return;
+  if(!content)return;
 
   el("sendButton").disabled=true;
   setStatus("chatStatus","جاري الإرسال...");
 
-  const {error}=await db
-    .from("private_messages")
-    .insert({
-      conversation_id:currentConversation,
-      content:content
-    });
+  try{
+    const {error}=await db
+      .from("private_messages")
+      .insert({
+        conversation_id:currentConversation,
+        content:content
+      });
 
-  el("sendButton").disabled=false;
+    if(error)throw error;
 
-  if(error){
+    input.value="";
+    setStatus("chatStatus","تم إرسال الرسالة.");
+    await loadPrivateMessages();
+  }catch(error){
     setStatus("chatStatus","تعذر إرسال الرسالة: "+error.message);
-    return;
+  }finally{
+    el("sendButton").disabled=false;
   }
-
-  input.value="";
-  setStatus("chatStatus","تم إرسال الرسالة.");
-  await loadPrivateMessages();
 }
 
 function closeConversation(){
   currentConversation=null;
-  currentOtherUser=null;
   clearInterval(messageTimer);
   el("conversation").style.display="none";
 }
 
 async function leaveChat(){
-  if(!confirm("واش بغيتي تخرج من ChatMix؟")) return;
+  if(!confirm("واش بغيتي تخرج من ChatMix؟"))return;
 
   clearInterval(refreshTimer);
   clearInterval(messageTimer);
   await db.auth.signOut();
-
   location.reload();
 }
 
@@ -588,7 +590,6 @@ el("messageInput").addEventListener("keydown",event=>{
 
 db.auth.getSession().then(({data})=>{
   if(data.session){
-    el("nickname").value="";
     setStatus("welcomeStatus","عندك جلسة سابقة. دخل بنفس الاسم المستعار.");
   }
 });
