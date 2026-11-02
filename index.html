@@ -131,8 +131,15 @@ footer{text-align:center;color:var(--muted);padding:25px}
 <button class="secondary" onclick="closeAuth()">إغلاق</button>
 </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  const SUPABASE_URL = "https://cnhyxbrqxwrwlrzpxgem.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_0COEsiw0kZ3KbHg0sgtZaw_RKUHAXHk";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 let currentName='';
 let currentRoom='النقاش العام';
 
