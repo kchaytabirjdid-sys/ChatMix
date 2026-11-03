@@ -9,173 +9,64 @@
 
 <style>
 :root{
-  --bg:#0c1020;
-  --panel:#151b30;
-  --text:#f5f6ff;
-  --muted:#aab2cb;
-  --accent:#8b5cf6;
-  --green:#22c7b8;
+  --bg:#0c1020;--panel:#151b30;--text:#f5f6ff;
+  --muted:#aab2cb;--accent:#8b5cf6;--green:#22c7b8;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:radial-gradient(circle at top right,#25204c,#0c1020 55%);
-  color:var(--text);
-  font-family:Tahoma,Arial,sans-serif;
+  margin:0;background:radial-gradient(circle at top right,#25204c,#0c1020 55%);
+  color:var(--text);font-family:Tahoma,Arial,sans-serif;
 }
 button,input{font:inherit}
 .wrap{max-width:950px;margin:auto;padding:15px}
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 0 20px;
-}
+header{display:flex;justify-content:space-between;align-items:center;padding:15px 0 20px}
 .brand{font-size:29px;font-weight:bold;color:#9b80ff}
-.panel{
-  background:var(--panel);
-  border:1px solid #2a3452;
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:16px;
-}
+.panel{background:var(--panel);border:1px solid #2a3452;border-radius:18px;padding:18px;margin-bottom:16px}
 h1{font-size:clamp(25px,5vw,36px);margin:0 0 10px}
 h2{font-size:19px;margin:0 0 15px}
 .sub,.muted{color:var(--muted);line-height:1.8}
 .muted,.notice{font-size:12px}
 .notice{color:var(--muted);line-height:1.8}
-button{
-  border:0;
-  border-radius:11px;
-  padding:11px 15px;
-  cursor:pointer;
-  font-weight:bold;
-}
+button{border:0;border-radius:11px;padding:11px 15px;cursor:pointer;font-weight:bold}
 button:disabled{opacity:.5;cursor:not-allowed}
 .primary{background:var(--accent);color:white}
 .secondary{background:#293452;color:white}
 .danger{background:#512b3a;color:#ffd9df}
-input{
-  width:100%;
-  background:#0e1528;
-  color:white;
-  border:1px solid #35405f;
-  border-radius:11px;
-  padding:13px;
-  margin:8px 0;
-}
+input{width:100%;background:#0e1528;color:white;border:1px solid #35405f;border-radius:11px;padding:13px;margin:8px 0}
 .row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .row button{flex-shrink:0}
 #app{display:none}
 #people,#requests,#chats{display:grid;gap:9px}
-.person{
-  background:#10182d;
-  border:1px solid #2a3452;
-  border-radius:13px;
-  padding:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
+.person{background:#10182d;border:1px solid #2a3452;border-radius:13px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .person strong{overflow-wrap:anywhere}
 .person small{display:block;color:var(--muted);margin-top:5px}
 #conversation{display:none}
-#chatMessages{
-  min-height:180px;
-  max-height:390px;
-  overflow-y:auto;
-  background:#0e1528;
-  border-radius:13px;
-  padding:12px;
-  margin:12px 0;
-}
-.bubble{
-  max-width:85%;
-  padding:10px 12px;
-  margin:8px 0;
-  border-radius:13px;
-  background:#293452;
-  overflow-wrap:anywhere;
-  white-space:pre-wrap;
-}
+#chatMessages{min-height:180px;max-height:390px;overflow-y:auto;background:#0e1528;border-radius:13px;padding:12px;margin:12px 0}
+.bubble{max-width:85%;padding:10px 12px;margin:8px 0;border-radius:13px;background:#293452;overflow-wrap:anywhere;white-space:pre-wrap}
 .bubble.mine{background:#49368a;margin-right:auto}
-.bubble small{
-  display:block;
-  color:#c6c9df;
-  font-size:10px;
-  margin-top:5px;
-}
+.bubble small{display:block;color:#c6c9df;font-size:10px;margin-top:5px}
 .status{color:var(--green);font-size:13px;line-height:1.8}
 footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
-
-/* Navigation */
-.nav{
-  display:flex;
-  gap:10px;
-  margin-bottom:18px;
-}
+.nav{display:flex;gap:10px;margin-bottom:18px}
 .nav button{flex:1;padding:13px}
-.nav button.active{
-  background:var(--accent);
-  color:white;
-}
+.nav button.active{background:var(--accent);color:white}
 .page{display:none}
 .page.active{display:block}
-
-/* Articles */
-.articles-intro{
-  background:linear-gradient(135deg,#30205d,#171d38);
-  border:1px solid #49368a;
-  border-radius:18px;
-  padding:24px;
-  margin-bottom:16px;
-}
+.articles-intro{background:linear-gradient(135deg,#30205d,#171d38);border:1px solid #49368a;border-radius:18px;padding:24px;margin-bottom:16px}
 .articles-intro h1{color:#c4b5fd}
-.articles-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:13px;
-}
-.article-card{
-  background:#10182d;
-  border:1px solid #2a3452;
-  border-radius:15px;
-  padding:17px;
-}
-.article-icon{
-  font-size:28px;
-  margin-bottom:10px;
-}
-.article-tag{
-  color:#b69cff;
-  font-size:12px;
-}
-.article-card h3{
-  font-size:17px;
-  margin:9px 0;
-}
-.article-card p{
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.9;
-}
+.articles-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.article-card{background:#10182d;border:1px solid #2a3452;border-radius:15px;padding:17px}
+.article-icon{font-size:28px;margin-bottom:10px}
+.article-tag{color:#b69cff;font-size:12px}
+.article-card h3{font-size:17px;margin:9px 0}
+.article-card p{font-size:13px;color:var(--muted);line-height:1.9}
 .article-card button{margin-top:8px}
 #articleReader{display:none}
-#articleReader .reader-content{
-  color:#d6d9e8;
-  line-height:2.1;
-  white-space:pre-line;
-}
+#articleReader .reader-content{color:#d6d9e8;line-height:2.1;white-space:pre-line}
 .search-box{margin-bottom:14px}
-.empty-message{
-  color:var(--muted);
-  text-align:center;
-  padding:20px;
-}
+.empty-message{color:var(--muted);text-align:center;padding:20px}
 @media(max-width:600px){
-  .wrap{padding:11px}
-  .panel{padding:14px}
+  .wrap{padding:11px}.panel{padding:14px}
   .articles-grid{grid-template-columns:1fr}
   .nav button{padding:11px 7px;font-size:13px}
 }
@@ -187,37 +78,27 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
 
 <header>
   <div class="brand">✦ ChatMix</div>
-  <button class="secondary" id="logoutButton"
-    style="display:none" onclick="leaveChat()">خروج</button>
+  <button class="secondary" id="logoutButton" style="display:none" onclick="leaveChat()">خروج</button>
 </header>
 
-<!-- Navigation -->
 <nav class="nav">
-  <button class="primary active" id="chatTab"
-    onclick="showPage('chat')">💬 الدردشة</button>
-  <button class="secondary" id="articlesTab"
-    onclick="showPage('articles')">📰 المقالات</button>
+  <button class="primary active" id="chatTab" onclick="showPage('chat')">💬 الدردشة</button>
+  <button class="secondary" id="articlesTab" onclick="showPage('articles')">📰 المقالات</button>
 </nav>
 
-<!-- Chat Page -->
 <div id="chatPage" class="page active">
 
 <section class="panel" id="welcome">
   <h1>مرحبا بك في ChatMix 👋</h1>
   <p class="sub">اختار اسماً مستعاراً وادخل للدردشة.</p>
   <label for="nickname">الاسم المستعار</label>
-  <input id="nickname" maxlength="24"
-    placeholder="اختار اسماً مستعاراً">
-  <button class="primary" id="enterButton"
-    onclick="enterChat()">الدخول إلى ChatMix</button>
-  <p class="notice">
-    استعمل اسماً مستعاراً، وما تشاركش معلوماتك الشخصية.
-  </p>
+  <input id="nickname" maxlength="24" placeholder="اختار اسماً مستعاراً">
+  <button class="primary" id="enterButton" onclick="enterChat()">الدخول إلى ChatMix</button>
+  <p class="notice">استعمل اسماً مستعاراً، وما تشاركش معلوماتك الشخصية.</p>
   <p id="welcomeStatus" class="status"></p>
 </section>
 
 <main id="app">
-
   <section class="panel">
     <h2>مرحبا، <span id="myName"></span></h2>
     <p class="muted">العمر والجنس: غير محدد</p>
@@ -247,34 +128,24 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
     </div>
     <div id="chatMessages"></div>
     <div class="row">
-      <input id="messageInput" maxlength="2000"
-        placeholder="كتب رسالتك..." style="flex:1">
-      <button class="primary" id="sendButton"
-        onclick="sendMessage()">إرسال</button>
+      <input id="messageInput" maxlength="2000" placeholder="كتب رسالتك..." style="flex:1">
+      <button class="primary" id="sendButton" onclick="sendMessage()">إرسال</button>
     </div>
     <p id="chatStatus" class="notice"></p>
   </section>
-
 </main>
-
 </div>
 
-<!-- Articles Page -->
 <div id="articlesPage" class="page">
-
   <section class="articles-intro">
     <h1>📰 مرحباً بك في مقالات ChatMix</h1>
-    <p class="sub">
-      اكتشف مواضيع مفيدة في التكنولوجيا والإنترنت
-      والتعلم والحياة اليومية.
-    </p>
+    <p class="sub">اكتشف مواضيع مفيدة في التكنولوجيا والإنترنت والتعلم والحياة اليومية.</p>
   </section>
 
   <section class="panel">
     <h2>🔎 ابحث عن مقال</h2>
-    <input id="articleSearch" class="search-box"
-      placeholder="كتب كلمة للبحث..."
-      oninput="searchArticles()">
+    <input id="articleSearch" class="search-box" placeholder="كتب كلمة للبحث..." oninput="searchArticles()">
+    <p id="articlesStatus" class="notice">جاري تحميل المقالات...</p>
   </section>
 
   <div id="articlesGrid" class="articles-grid"></div>
@@ -287,21 +158,17 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
     <p class="muted" id="readerDate"></p>
     <div class="reader-content" id="readerContent"></div>
   </section>
-
 </div>
 
-<!-- Rules -->
 <section class="panel">
   <h2>قواعد ChatMix</h2>
   <p class="notice">
     احترم الآخرين. ما تشاركش كلمات المرور أو رقم الهاتف أو العنوان.
-    ما تضغطش على الروابط المشبوهة.
-    تقدر ترفض أي طلب محادثة ما مرتاحش ليه.
+    ما تضغطش على الروابط المشبوهة. تقدر ترفض أي طلب محادثة ما مرتاحش ليه.
   </p>
 </section>
 
 <footer>© 2026 ChatMix - جميع الحقوق محفوظة</footer>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -310,11 +177,7 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
 const SUPABASE_URL="https://cnhyxbrqxwrwlrzpxgem.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_0COEsiw0kZ3KbHg0sgtZaw_RKUHAXHk";
 
-const db=window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
-
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const el=id=>document.getElementById(id);
 
 let myUserId=null;
@@ -327,129 +190,73 @@ let loadingMessages=false;
 /* Navigation */
 function showPage(page){
   const chat=page==="chat";
-
   el("chatPage").classList.toggle("active",chat);
   el("articlesPage").classList.toggle("active",!chat);
-
   el("chatTab").className=chat?"primary active":"secondary";
   el("articlesTab").className=chat?"secondary":"primary active";
-
-  if(!chat) closeConversation();
+  if(!chat){
+    closeConversation();
+    loadArticles();
+  }
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
-/* Articles data - demo content */
-const articles=[
-  {
-    id:1,
-    category:"التكنولوجيا",
-    icon:"🤖",
-    title:"الذكاء الاصطناعي في حياتنا اليومية",
-    description:"تعرف على استعمالات الذكاء الاصطناعي وكيف يمكن أن يساعدنا.",
-    date:"2026",
-    content:`أصبح الذكاء الاصطناعي جزءاً من حياتنا اليومية.
+/* Articles from Supabase */
+let articles=[];
+let articlesLoaded=false;
+let articlesLoading=false;
 
-يمكن استعماله للمساعدة في التعلم، وتنظيم الأفكار،
-وترجمة النصوص، والبحث عن المعلومات.
+function formatArticleDate(value){
+  if(!value)return "تاريخ غير محدد";
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime()))return "تاريخ غير محدد";
+  return date.toLocaleDateString("ar-MA");
+}
 
-لكن من المهم دائماً مراجعة المعلومات التي يقدمها،
-لأنها قد تكون غير دقيقة أحياناً.
+async function loadArticles(){
+  if(articlesLoading)return;
+  articlesLoading=true;
+  el("articlesStatus").textContent="جاري تحميل المقالات...";
+  try{
+    const {data,error}=await db
+      .from("articles")
+      .select("id,title,category,content,description,icon,created_at")
+      .eq("published",true)
+      .order("created_at",{ascending:false});
 
-استعمل التكنولوجيا بذكاء، ولا تشارك معلوماتك الشخصية
-مع المواقع أو التطبيقات التي لا تثق بها.`
-  },
-  {
-    id:2,
-    category:"الأمان الرقمي",
-    icon:"🔐",
-    title:"كيف تحمي خصوصيتك على الإنترنت؟",
-    description:"نصائح بسيطة لحماية حساباتك ومعلوماتك الشخصية.",
-    date:"2026",
-    content:`حماية الخصوصية مهمة لكل مستعمل للإنترنت.
+    if(error)throw error;
 
-استعمل كلمات مرور قوية ومختلفة للحسابات المهمة.
-لا تشارك كلمة المرور مع أي شخص.
-تجنب الضغط على الروابط المشبوهة.
-ولا تنشر عنوانك أو رقم هاتفك أو معلوماتك الخاصة.
+    articles=(data||[]).map(item=>({
+      id:item.id,
+      category:item.category||"عام",
+      icon:item.icon||"📰",
+      title:item.title||"بدون عنوان",
+      description:item.description||"",
+      date:formatArticleDate(item.created_at),
+      content:item.content||""
+    }));
 
-إذا شككت في رسالة أو رابط، لا تتسرع في فتحه.`
-  },
-  {
-    id:3,
-    category:"التطبيقات",
-    icon:"📱",
-    title:"كيف تختار التطبيقات المفيدة؟",
-    description:"تعرف على بعض المعايير لاختيار تطبيقات مناسبة.",
-    date:"2026",
-    content:`قبل تثبيت أي تطبيق، اقرأ وصفه وتقييماته.
-
-تحقق من الصلاحيات التي يطلبها التطبيق،
-ولا تمنحه صلاحيات لا يحتاجها.
-
-حمل التطبيقات من المتاجر الرسمية،
-وحافظ على تحديثها باستمرار.
-
-اختيار التطبيقات بعناية يساعدك على استعمال هاتفك
-بطريقة أفضل وأكثر أماناً.`
-  },
-  {
-    id:4,
-    category:"التعلم",
-    icon:"📚",
-    title:"خطوات بسيطة لتعلم مهارة جديدة",
-    description:"كيف تنظم وقتك وتتعلم شيئاً جديداً بالتدريج.",
-    date:"2026",
-    content:`تعلم مهارة جديدة يحتاج إلى الصبر والاستمرار.
-
-ابدأ بهدف صغير وواضح.
-خصص وقتاً مناسباً للتعلم.
-قسم الدروس إلى خطوات سهلة.
-جرب ما تعلمته بنفسك.
-ولا تتوقف بسبب الأخطاء، فهي جزء طبيعي من التعلم.
-
-التقدم الصغير والمستمر يمكن أن يصنع فرقاً كبيراً.`
-  },
-  {
-    id:5,
-    category:"الإنترنت",
-    icon:"🌐",
-    title:"كيف تستعمل الإنترنت بشكل إيجابي؟",
-    description:"أفكار للاستفادة من الإنترنت في التعلم والإبداع.",
-    date:"2026",
-    content:`الإنترنت يوفر فرصاً كثيرة للتعلم والإبداع.
-
-يمكنك البحث عن دروس مفيدة،
-وتعلم اللغات، واكتشاف مجالات جديدة،
-والتواصل مع الآخرين باحترام.
-
-حاول أن تتحقق من مصادر المعلومات،
-وأن توازن بين وقت الشاشة والأنشطة الأخرى.`
-  },
-  {
-    id:6,
-    category:"نصائح",
-    icon:"💡",
-    title:"تنظيم الوقت بطريقة بسيطة",
-    description:"طرق عملية لتنظيم المهام اليومية.",
-    date:"2026",
-    content:`تنظيم الوقت يبدأ بتحديد الأولويات.
-
-اكتب المهام التي تريد إنجازها.
-ابدأ بالأهم.
-قسم الأعمال الكبيرة إلى خطوات صغيرة.
-خذ فترات راحة مناسبة.
-وفي نهاية اليوم راجع ما أنجزته.
-
-لا تحتاج إلى خطة معقدة حتى تبدأ بتنظيم وقتك.`
+    articlesLoaded=true;
+    el("articlesStatus").textContent=
+      articles.length ? "عدد المقالات: "+articles.length : "ما كايناش مقالات منشورة دابا.";
+    searchArticles();
+  }catch(error){
+    el("articlesStatus").textContent="تعذر تحميل المقالات: "+error.message;
+    el("articlesGrid").replaceChildren();
+  }finally{
+    articlesLoading=false;
   }
-];
+}
 
 function renderArticles(list=articles){
   const grid=el("articlesGrid");
   grid.replaceChildren();
 
   if(!list.length){
-    grid.innerHTML='<div class="empty-message">ما لقينا حتى مقال بهاد البحث.</div>';
+    const empty=document.createElement("div");
+    empty.className="empty-message";
+    empty.textContent="ما لقينا حتى مقال بهاد البحث.";
+    grid.append(empty);
     return;
   }
 
@@ -483,25 +290,22 @@ function renderArticles(list=articles){
 
 function searchArticles(){
   const query=el("articleSearch").value.trim().toLowerCase();
-
   const filtered=articles.filter(article=>
     article.title.toLowerCase().includes(query)||
     article.category.toLowerCase().includes(query)||
-    article.description.toLowerCase().includes(query)
+    article.description.toLowerCase().includes(query)||
+    article.content.toLowerCase().includes(query)
   );
-
   renderArticles(filtered);
 }
 
 function openArticle(id){
-  const article=articles.find(item=>item.id===id);
+  const article=articles.find(item=>String(item.id)===String(id));
   if(!article)return;
-
   el("readerCategory").textContent=article.category;
   el("readerTitle").textContent=article.title;
   el("readerDate").textContent=article.date;
   el("readerContent").textContent=article.content;
-
   el("articleReader").style.display="block";
   el("articleReader").scrollIntoView({behavior:"smooth"});
 }
@@ -544,38 +348,26 @@ async function enterChat(){
     myUserId=session.user.id;
 
     const {data:existing,error:profileError}=await db
-      .from("profiles")
-      .select("*")
-      .eq("user_id",myUserId)
-      .maybeSingle();
+      .from("profiles").select("*").eq("user_id",myUserId).maybeSingle();
 
     if(profileError)throw profileError;
 
     if(existing){
       myProfile=existing;
-
       if(existing.display_name!==name){
         const {data:updated,error:updateError}=await db
-          .from("profiles")
-          .update({display_name:name})
-          .eq("user_id",myUserId)
-          .select("*")
-          .single();
-
+          .from("profiles").update({display_name:name})
+          .eq("user_id",myUserId).select("*").single();
         if(updateError)throw updateError;
         myProfile=updated;
       }
     }else{
       const {data:created,error:createError}=await db
-        .from("profiles")
-        .insert({
+        .from("profiles").insert({
           user_id:myUserId,
           display_name:name,
           age_group:"unspecified"
-        })
-        .select("*")
-        .single();
-
+        }).select("*").single();
       if(createError)throw createError;
       myProfile=created;
     }
@@ -603,12 +395,9 @@ async function enterChat(){
 
 async function updatePresence(){
   if(!myUserId)return;
-
-  const {error}=await db
-    .from("profiles")
+  const {error}=await db.from("profiles")
     .update({last_seen:new Date().toISOString()})
     .eq("user_id",myUserId);
-
   setStatus("appStatus",error?"تعذر تحديث الاتصال":"متصل");
 }
 
@@ -617,12 +406,10 @@ async function refreshAll(){
 }
 
 async function loadPeople(){
-  const {data,error}=await db
-    .from("profiles")
+  const {data,error}=await db.from("profiles")
     .select("user_id,display_name,last_seen")
     .neq("user_id",myUserId)
-    .order("last_seen",{ascending:false})
-    .limit(50);
+    .order("last_seen",{ascending:false}).limit(50);
 
   if(error){
     el("people").textContent="تعذر تحميل الزوار: "+error.message;
@@ -635,7 +422,6 @@ async function loadPeople(){
   );
 
   el("people").replaceChildren();
-
   if(!people.length){
     el("people").textContent="ما كاين حتى زائر متصل دابا.";
     return;
@@ -644,33 +430,25 @@ async function loadPeople(){
   people.forEach(person=>{
     const card=document.createElement("div");
     card.className="person";
-
     const info=document.createElement("div");
     const name=document.createElement("strong");
     name.textContent=person.display_name;
-
     const small=document.createElement("small");
     small.textContent="زائر متصل";
     info.append(name,small);
-
     const button=document.createElement("button");
     button.className="primary";
     button.textContent="محادثة";
     button.onclick=()=>startConversation(person.user_id);
-
     card.append(info,button);
     el("people").append(card);
   });
 }
 
 async function findConversation(otherId){
-  const {data,error}=await db
-    .from("private_conversations")
+  const {data,error}=await db.from("private_conversations")
     .select("id,user_one,user_two,status")
-    .or(
-      `and(user_one.eq.${myUserId},user_two.eq.${otherId}),and(user_one.eq.${otherId},user_two.eq.${myUserId})`
-    );
-
+    .or(`and(user_one.eq.${myUserId},user_two.eq.${otherId}),and(user_one.eq.${otherId},user_two.eq.${myUserId})`);
   if(error)throw error;
   return data?.[0]||null;
 }
@@ -678,18 +456,10 @@ async function findConversation(otherId){
 async function startConversation(otherId){
   try{
     let conversation=await findConversation(otherId);
-
     if(!conversation){
-      const {data,error}=await db
-        .from("private_conversations")
-        .insert({
-          user_one:myUserId,
-          user_two:otherId,
-          status:"pending"
-        })
-        .select("id,user_one,user_two,status")
-        .single();
-
+      const {data,error}=await db.from("private_conversations")
+        .insert({user_one:myUserId,user_two:otherId,status:"pending"})
+        .select("id,user_one,user_two,status").single();
       if(error)throw error;
       conversation=data;
       alert("تصيفط طلب المحادثة.");
@@ -698,15 +468,12 @@ async function startConversation(otherId){
     if(conversation.status==="accepted"){
       await openConversation(conversation,otherId);
     }else if(conversation.status==="pending"){
-      alert(
-        conversation.user_one===myUserId
+      alert(conversation.user_one===myUserId
         ?"طلبك باقي كيتسنى القبول."
-        :"عندك طلب محادثة من هاد الزائر."
-      );
+        :"عندك طلب محادثة من هاد الزائر.");
     }else{
       alert("هاد الطلب مرفوض.");
     }
-
     await refreshAll();
   }catch(error){
     alert("تعذر فتح المحادثة: "+error.message);
@@ -714,11 +481,9 @@ async function startConversation(otherId){
 }
 
 async function loadRequests(){
-  const {data,error}=await db
-    .from("private_conversations")
+  const {data,error}=await db.from("private_conversations")
     .select("id,user_one,user_two,status,created_at")
-    .eq("user_two",myUserId)
-    .eq("status","pending")
+    .eq("user_two",myUserId).eq("status","pending")
     .order("created_at",{ascending:false});
 
   if(error){
@@ -727,34 +492,27 @@ async function loadRequests(){
   }
 
   el("requests").replaceChildren();
-
   if(!data?.length){
     el("requests").textContent="ما كايناش طلبات جديدة.";
     return;
   }
 
   const ids=data.map(c=>c.user_one);
-  const {data:profiles,error:profileError}=await db
-    .from("profiles")
-    .select("user_id,display_name")
-    .in("user_id",ids);
+  const {data:profiles,error:profileError}=await db.from("profiles")
+    .select("user_id,display_name").in("user_id",ids);
 
   if(profileError){
     el("requests").textContent="تعذر تحميل أسماء المرسلين.";
     return;
   }
 
-  const names=Object.fromEntries(
-    (profiles||[]).map(p=>[p.user_id,p.display_name])
-  );
+  const names=Object.fromEntries((profiles||[]).map(p=>[p.user_id,p.display_name]));
 
   data.forEach(c=>{
     const card=document.createElement("div");
     card.className="person";
-
     const info=document.createElement("strong");
     info.textContent=names[c.user_one]||"زائر";
-
     const actions=document.createElement("div");
     actions.className="row";
 
@@ -775,22 +533,17 @@ async function loadRequests(){
 }
 
 async function respondRequest(id,status){
-  const {error}=await db
-    .from("private_conversations")
-    .update({status})
-    .eq("id",id);
-
+  const {error}=await db.from("private_conversations")
+    .update({status}).eq("id",id);
   if(error){
     alert("تعذر تحديث الطلب: "+error.message);
     return;
   }
-
   await refreshAll();
 }
 
 async function loadChats(){
-  const {data,error}=await db
-    .from("private_conversations")
+  const {data,error}=await db.from("private_conversations")
     .select("id,user_one,user_two,status")
     .eq("status","accepted")
     .or(`user_one.eq.${myUserId},user_two.eq.${myUserId}`);
@@ -801,38 +554,26 @@ async function loadChats(){
   }
 
   el("chats").replaceChildren();
-
   if(!data?.length){
     el("chats").textContent="ما عندك حتى محادثة مقبولة دابا.";
     return;
   }
 
-  const otherIds=data.map(c=>
-    c.user_one===myUserId?c.user_two:c.user_one
-  );
-
-  const {data:profiles}=await db
-    .from("profiles")
-    .select("user_id,display_name")
-    .in("user_id",otherIds);
-
-  const names=Object.fromEntries(
-    (profiles||[]).map(p=>[p.user_id,p.display_name])
-  );
+  const otherIds=data.map(c=>c.user_one===myUserId?c.user_two:c.user_one);
+  const {data:profiles}=await db.from("profiles")
+    .select("user_id,display_name").in("user_id",otherIds);
+  const names=Object.fromEntries((profiles||[]).map(p=>[p.user_id,p.display_name]));
 
   data.forEach(c=>{
     const otherId=c.user_one===myUserId?c.user_two:c.user_one;
     const card=document.createElement("div");
     card.className="person";
-
     const name=document.createElement("strong");
     name.textContent=names[otherId]||"زائر";
-
     const button=document.createElement("button");
     button.className="primary";
     button.textContent="فتح المحادثة";
     button.onclick=()=>openConversation(c,otherId);
-
     card.append(name,button);
     el("chats").append(card);
   });
@@ -840,25 +581,18 @@ async function loadChats(){
 
 async function openConversation(conversation,otherId){
   currentConversation=conversation.id;
-
-  const {data:profile,error}=await db
-    .from("profiles")
-    .select("display_name")
-    .eq("user_id",otherId)
-    .maybeSingle();
+  const {data:profile,error}=await db.from("profiles")
+    .select("display_name").eq("user_id",otherId).maybeSingle();
 
   if(error){
     setStatus("chatStatus","تعذر تحميل اسم الزائر.");
     return;
   }
 
-  el("chatTitle").textContent=
-    "محادثة مع "+(profile?.display_name||"زائر");
-
+  el("chatTitle").textContent="محادثة مع "+(profile?.display_name||"زائر");
   el("conversation").style.display="block";
   el("conversation").scrollIntoView({behavior:"smooth"});
   await loadPrivateMessages();
-
   clearInterval(messageTimer);
   messageTimer=setInterval(loadPrivateMessages,4000);
 }
@@ -866,15 +600,11 @@ async function openConversation(conversation,otherId){
 async function loadPrivateMessages(){
   if(!currentConversation||loadingMessages)return;
   loadingMessages=true;
-
   try{
-    const {data,error}=await db
-      .from("private_messages")
+    const {data,error}=await db.from("private_messages")
       .select("id,sender_id,content,created_at")
       .eq("conversation_id",currentConversation)
-      .order("created_at",{ascending:true})
-      .limit(100);
-
+      .order("created_at",{ascending:true}).limit(100);
     if(error)throw error;
 
     const box=el("chatMessages");
@@ -882,16 +612,11 @@ async function loadPrivateMessages(){
 
     (data||[]).forEach(message=>{
       const bubble=document.createElement("div");
-      bubble.className="bubble"+
-        (message.sender_id===myUserId?" mine":"");
-
+      bubble.className="bubble"+(message.sender_id===myUserId?" mine":"");
       const content=document.createElement("div");
       content.textContent=message.content;
-
       const time=document.createElement("small");
-      time.textContent=new Date(message.created_at)
-        .toLocaleTimeString("ar-MA");
-
+      time.textContent=new Date(message.created_at).toLocaleTimeString("ar-MA");
       bubble.append(content,time);
       box.append(bubble);
     });
@@ -907,7 +632,6 @@ async function loadPrivateMessages(){
 
 async function sendMessage(){
   if(!currentConversation)return;
-
   const input=el("messageInput");
   const content=input.value.trim();
   if(!content)return;
@@ -916,15 +640,11 @@ async function sendMessage(){
   setStatus("chatStatus","جاري الإرسال...");
 
   try{
-    const {error}=await db
-      .from("private_messages")
-      .insert({
-        conversation_id:currentConversation,
-        content:content
-      });
-
+    const {error}=await db.from("private_messages").insert({
+      conversation_id:currentConversation,
+      content:content
+    });
     if(error)throw error;
-
     input.value="";
     setStatus("chatStatus","تم إرسال الرسالة.");
     await loadPrivateMessages();
@@ -943,7 +663,6 @@ function closeConversation(){
 
 async function leaveChat(){
   if(!confirm("واش بغيتي تخرج من ChatMix؟"))return;
-
   clearInterval(refreshTimer);
   clearInterval(messageTimer);
   await db.auth.signOut();
@@ -963,8 +682,8 @@ db.auth.getSession().then(({data})=>{
   }
 });
 
-/* Load demo articles */
-renderArticles();
+/* Load articles from database */
+loadArticles();
 </script>
 
 </body>
