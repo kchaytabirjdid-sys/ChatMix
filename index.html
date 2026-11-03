@@ -4,63 +4,220 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="ChatMix - دردشة خاصة">
-<title>ChatMix</title>
+<meta name="description" content="ChatMix - دردشة ومقالات مفيدة">
+<title>ChatMix - دردشة ومقالات</title>
+
 <style>
-:root{--bg:#0c1020;--panel:#151b30;--text:#f5f6ff;--muted:#aab2cb;--accent:#8b5cf6;--green:#22c7b8}
+:root{
+  --bg:#0c1020;
+  --panel:#151b30;
+  --text:#f5f6ff;
+  --muted:#aab2cb;
+  --accent:#8b5cf6;
+  --green:#22c7b8;
+}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at top right,#25204c,#0c1020 55%);color:var(--text);font-family:Tahoma,Arial,sans-serif}
+body{
+  margin:0;
+  background:radial-gradient(circle at top right,#25204c,#0c1020 55%);
+  color:var(--text);
+  font-family:Tahoma,Arial,sans-serif;
+}
 button,input{font:inherit}
-.wrap{max-width:900px;margin:auto;padding:15px}
-header{display:flex;justify-content:space-between;align-items:center;padding:15px 0 22px}
+.wrap{max-width:950px;margin:auto;padding:15px}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 0 20px;
+}
 .brand{font-size:29px;font-weight:bold;color:#9b80ff}
-.panel{background:var(--panel);border:1px solid #2a3452;border-radius:18px;padding:18px;margin-bottom:16px}
+.panel{
+  background:var(--panel);
+  border:1px solid #2a3452;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:16px;
+}
 h1{font-size:clamp(25px,5vw,36px);margin:0 0 10px}
 h2{font-size:19px;margin:0 0 15px}
 .sub,.muted{color:var(--muted);line-height:1.8}
 .muted,.notice{font-size:12px}
 .notice{color:var(--muted);line-height:1.8}
-button{border:0;border-radius:11px;padding:11px 15px;cursor:pointer;font-weight:bold}
-button:disabled{opacity:.5}
+button{
+  border:0;
+  border-radius:11px;
+  padding:11px 15px;
+  cursor:pointer;
+  font-weight:bold;
+}
+button:disabled{opacity:.5;cursor:not-allowed}
 .primary{background:var(--accent);color:white}
 .secondary{background:#293452;color:white}
 .danger{background:#512b3a;color:#ffd9df}
-input{width:100%;background:#0e1528;color:white;border:1px solid #35405f;border-radius:11px;padding:13px;margin:8px 0}
+input{
+  width:100%;
+  background:#0e1528;
+  color:white;
+  border:1px solid #35405f;
+  border-radius:11px;
+  padding:13px;
+  margin:8px 0;
+}
 .row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .row button{flex-shrink:0}
 #app{display:none}
 #people,#requests,#chats{display:grid;gap:9px}
-.person{background:#10182d;border:1px solid #2a3452;border-radius:13px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.person{
+  background:#10182d;
+  border:1px solid #2a3452;
+  border-radius:13px;
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
 .person strong{overflow-wrap:anywhere}
 .person small{display:block;color:var(--muted);margin-top:5px}
 #conversation{display:none}
-#chatMessages{min-height:180px;max-height:390px;overflow-y:auto;background:#0e1528;border-radius:13px;padding:12px;margin:12px 0}
-.bubble{max-width:85%;padding:10px 12px;margin:8px 0;border-radius:13px;background:#293452;overflow-wrap:anywhere;white-space:pre-wrap}
+#chatMessages{
+  min-height:180px;
+  max-height:390px;
+  overflow-y:auto;
+  background:#0e1528;
+  border-radius:13px;
+  padding:12px;
+  margin:12px 0;
+}
+.bubble{
+  max-width:85%;
+  padding:10px 12px;
+  margin:8px 0;
+  border-radius:13px;
+  background:#293452;
+  overflow-wrap:anywhere;
+  white-space:pre-wrap;
+}
 .bubble.mine{background:#49368a;margin-right:auto}
-.bubble small{display:block;color:#c6c9df;font-size:10px;margin-top:5px}
+.bubble small{
+  display:block;
+  color:#c6c9df;
+  font-size:10px;
+  margin-top:5px;
+}
 .status{color:var(--green);font-size:13px;line-height:1.8}
 footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
-@media(max-width:600px){.wrap{padding:11px}.panel{padding:14px}}
+
+/* Navigation */
+.nav{
+  display:flex;
+  gap:10px;
+  margin-bottom:18px;
+}
+.nav button{flex:1;padding:13px}
+.nav button.active{
+  background:var(--accent);
+  color:white;
+}
+.page{display:none}
+.page.active{display:block}
+
+/* Articles */
+.articles-intro{
+  background:linear-gradient(135deg,#30205d,#171d38);
+  border:1px solid #49368a;
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:16px;
+}
+.articles-intro h1{color:#c4b5fd}
+.articles-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+}
+.article-card{
+  background:#10182d;
+  border:1px solid #2a3452;
+  border-radius:15px;
+  padding:17px;
+}
+.article-icon{
+  font-size:28px;
+  margin-bottom:10px;
+}
+.article-tag{
+  color:#b69cff;
+  font-size:12px;
+}
+.article-card h3{
+  font-size:17px;
+  margin:9px 0;
+}
+.article-card p{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.9;
+}
+.article-card button{margin-top:8px}
+#articleReader{display:none}
+#articleReader .reader-content{
+  color:#d6d9e8;
+  line-height:2.1;
+  white-space:pre-line;
+}
+.search-box{margin-bottom:14px}
+.empty-message{
+  color:var(--muted);
+  text-align:center;
+  padding:20px;
+}
+@media(max-width:600px){
+  .wrap{padding:11px}
+  .panel{padding:14px}
+  .articles-grid{grid-template-columns:1fr}
+  .nav button{padding:11px 7px;font-size:13px}
+}
 </style>
 </head>
+
 <body>
 <div class="wrap">
+
 <header>
   <div class="brand">✦ ChatMix</div>
-  <button class="secondary" id="logoutButton" style="display:none" onclick="leaveChat()">خروج</button>
+  <button class="secondary" id="logoutButton"
+    style="display:none" onclick="leaveChat()">خروج</button>
 </header>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="primary active" id="chatTab"
+    onclick="showPage('chat')">💬 الدردشة</button>
+  <button class="secondary" id="articlesTab"
+    onclick="showPage('articles')">📰 المقالات</button>
+</nav>
+
+<!-- Chat Page -->
+<div id="chatPage" class="page active">
 
 <section class="panel" id="welcome">
   <h1>مرحبا بك في ChatMix 👋</h1>
   <p class="sub">اختار اسماً مستعاراً وادخل للدردشة.</p>
   <label for="nickname">الاسم المستعار</label>
-  <input id="nickname" maxlength="24" placeholder="اختار اسماً مستعاراً">
-  <button class="primary" id="enterButton" onclick="enterChat()">الدخول إلى ChatMix</button>
-  <p class="notice">استعمل اسماً مستعاراً، وما تشاركش معلوماتك الشخصية.</p>
+  <input id="nickname" maxlength="24"
+    placeholder="اختار اسماً مستعاراً">
+  <button class="primary" id="enterButton"
+    onclick="enterChat()">الدخول إلى ChatMix</button>
+  <p class="notice">
+    استعمل اسماً مستعاراً، وما تشاركش معلوماتك الشخصية.
+  </p>
   <p id="welcomeStatus" class="status"></p>
 </section>
 
 <main id="app">
+
   <section class="panel">
     <h2>مرحبا، <span id="myName"></span></h2>
     <p class="muted">العمر والجنس: غير محدد</p>
@@ -90,24 +247,65 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
     </div>
     <div id="chatMessages"></div>
     <div class="row">
-      <input id="messageInput" maxlength="2000" placeholder="كتب رسالتك..." style="flex:1">
-      <button class="primary" id="sendButton" onclick="sendMessage()">إرسال</button>
+      <input id="messageInput" maxlength="2000"
+        placeholder="كتب رسالتك..." style="flex:1">
+      <button class="primary" id="sendButton"
+        onclick="sendMessage()">إرسال</button>
     </div>
     <p id="chatStatus" class="notice"></p>
   </section>
+
 </main>
 
+</div>
+
+<!-- Articles Page -->
+<div id="articlesPage" class="page">
+
+  <section class="articles-intro">
+    <h1>📰 مرحباً بك في مقالات ChatMix</h1>
+    <p class="sub">
+      اكتشف مواضيع مفيدة في التكنولوجيا والإنترنت
+      والتعلم والحياة اليومية.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>🔎 ابحث عن مقال</h2>
+    <input id="articleSearch" class="search-box"
+      placeholder="كتب كلمة للبحث..."
+      oninput="searchArticles()">
+  </section>
+
+  <div id="articlesGrid" class="articles-grid"></div>
+
+  <section class="panel" id="articleReader">
+    <button class="secondary" onclick="closeArticle()">← رجوع للمقالات</button>
+    <div style="height:15px"></div>
+    <span class="article-tag" id="readerCategory"></span>
+    <h1 id="readerTitle"></h1>
+    <p class="muted" id="readerDate"></p>
+    <div class="reader-content" id="readerContent"></div>
+  </section>
+
+</div>
+
+<!-- Rules -->
 <section class="panel">
   <h2>قواعد ChatMix</h2>
   <p class="notice">
     احترم الآخرين. ما تشاركش كلمات المرور أو رقم الهاتف أو العنوان.
-    ما تضغطش على الروابط المشبوهة. تقدر ترفض أي طلب محادثة ما مرتاحش ليه.
+    ما تضغطش على الروابط المشبوهة.
+    تقدر ترفض أي طلب محادثة ما مرتاحش ليه.
   </p>
 </section>
-<footer>© 2026 ChatMix</footer>
+
+<footer>© 2026 ChatMix - جميع الحقوق محفوظة</footer>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 const SUPABASE_URL="https://cnhyxbrqxwrwlrzpxgem.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_0COEsiw0kZ3KbHg0sgtZaw_RKUHAXHk";
@@ -118,6 +316,7 @@ const db=window.supabase.createClient(
 );
 
 const el=id=>document.getElementById(id);
+
 let myUserId=null;
 let myProfile=null;
 let currentConversation=null;
@@ -125,6 +324,193 @@ let refreshTimer=null;
 let messageTimer=null;
 let loadingMessages=false;
 
+/* Navigation */
+function showPage(page){
+  const chat=page==="chat";
+
+  el("chatPage").classList.toggle("active",chat);
+  el("articlesPage").classList.toggle("active",!chat);
+
+  el("chatTab").className=chat?"primary active":"secondary";
+  el("articlesTab").className=chat?"secondary":"primary active";
+
+  if(!chat) closeConversation();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* Articles data - demo content */
+const articles=[
+  {
+    id:1,
+    category:"التكنولوجيا",
+    icon:"🤖",
+    title:"الذكاء الاصطناعي في حياتنا اليومية",
+    description:"تعرف على استعمالات الذكاء الاصطناعي وكيف يمكن أن يساعدنا.",
+    date:"2026",
+    content:`أصبح الذكاء الاصطناعي جزءاً من حياتنا اليومية.
+
+يمكن استعماله للمساعدة في التعلم، وتنظيم الأفكار،
+وترجمة النصوص، والبحث عن المعلومات.
+
+لكن من المهم دائماً مراجعة المعلومات التي يقدمها،
+لأنها قد تكون غير دقيقة أحياناً.
+
+استعمل التكنولوجيا بذكاء، ولا تشارك معلوماتك الشخصية
+مع المواقع أو التطبيقات التي لا تثق بها.`
+  },
+  {
+    id:2,
+    category:"الأمان الرقمي",
+    icon:"🔐",
+    title:"كيف تحمي خصوصيتك على الإنترنت؟",
+    description:"نصائح بسيطة لحماية حساباتك ومعلوماتك الشخصية.",
+    date:"2026",
+    content:`حماية الخصوصية مهمة لكل مستعمل للإنترنت.
+
+استعمل كلمات مرور قوية ومختلفة للحسابات المهمة.
+لا تشارك كلمة المرور مع أي شخص.
+تجنب الضغط على الروابط المشبوهة.
+ولا تنشر عنوانك أو رقم هاتفك أو معلوماتك الخاصة.
+
+إذا شككت في رسالة أو رابط، لا تتسرع في فتحه.`
+  },
+  {
+    id:3,
+    category:"التطبيقات",
+    icon:"📱",
+    title:"كيف تختار التطبيقات المفيدة؟",
+    description:"تعرف على بعض المعايير لاختيار تطبيقات مناسبة.",
+    date:"2026",
+    content:`قبل تثبيت أي تطبيق، اقرأ وصفه وتقييماته.
+
+تحقق من الصلاحيات التي يطلبها التطبيق،
+ولا تمنحه صلاحيات لا يحتاجها.
+
+حمل التطبيقات من المتاجر الرسمية،
+وحافظ على تحديثها باستمرار.
+
+اختيار التطبيقات بعناية يساعدك على استعمال هاتفك
+بطريقة أفضل وأكثر أماناً.`
+  },
+  {
+    id:4,
+    category:"التعلم",
+    icon:"📚",
+    title:"خطوات بسيطة لتعلم مهارة جديدة",
+    description:"كيف تنظم وقتك وتتعلم شيئاً جديداً بالتدريج.",
+    date:"2026",
+    content:`تعلم مهارة جديدة يحتاج إلى الصبر والاستمرار.
+
+ابدأ بهدف صغير وواضح.
+خصص وقتاً مناسباً للتعلم.
+قسم الدروس إلى خطوات سهلة.
+جرب ما تعلمته بنفسك.
+ولا تتوقف بسبب الأخطاء، فهي جزء طبيعي من التعلم.
+
+التقدم الصغير والمستمر يمكن أن يصنع فرقاً كبيراً.`
+  },
+  {
+    id:5,
+    category:"الإنترنت",
+    icon:"🌐",
+    title:"كيف تستعمل الإنترنت بشكل إيجابي؟",
+    description:"أفكار للاستفادة من الإنترنت في التعلم والإبداع.",
+    date:"2026",
+    content:`الإنترنت يوفر فرصاً كثيرة للتعلم والإبداع.
+
+يمكنك البحث عن دروس مفيدة،
+وتعلم اللغات، واكتشاف مجالات جديدة،
+والتواصل مع الآخرين باحترام.
+
+حاول أن تتحقق من مصادر المعلومات،
+وأن توازن بين وقت الشاشة والأنشطة الأخرى.`
+  },
+  {
+    id:6,
+    category:"نصائح",
+    icon:"💡",
+    title:"تنظيم الوقت بطريقة بسيطة",
+    description:"طرق عملية لتنظيم المهام اليومية.",
+    date:"2026",
+    content:`تنظيم الوقت يبدأ بتحديد الأولويات.
+
+اكتب المهام التي تريد إنجازها.
+ابدأ بالأهم.
+قسم الأعمال الكبيرة إلى خطوات صغيرة.
+خذ فترات راحة مناسبة.
+وفي نهاية اليوم راجع ما أنجزته.
+
+لا تحتاج إلى خطة معقدة حتى تبدأ بتنظيم وقتك.`
+  }
+];
+
+function renderArticles(list=articles){
+  const grid=el("articlesGrid");
+  grid.replaceChildren();
+
+  if(!list.length){
+    grid.innerHTML='<div class="empty-message">ما لقينا حتى مقال بهاد البحث.</div>';
+    return;
+  }
+
+  list.forEach(article=>{
+    const card=document.createElement("article");
+    card.className="article-card";
+
+    const icon=document.createElement("div");
+    icon.className="article-icon";
+    icon.textContent=article.icon;
+
+    const category=document.createElement("span");
+    category.className="article-tag";
+    category.textContent=article.category;
+
+    const title=document.createElement("h3");
+    title.textContent=article.title;
+
+    const description=document.createElement("p");
+    description.textContent=article.description;
+
+    const button=document.createElement("button");
+    button.className="primary";
+    button.textContent="اقرأ المقال";
+    button.onclick=()=>openArticle(article.id);
+
+    card.append(icon,category,title,description,button);
+    grid.append(card);
+  });
+}
+
+function searchArticles(){
+  const query=el("articleSearch").value.trim().toLowerCase();
+
+  const filtered=articles.filter(article=>
+    article.title.toLowerCase().includes(query)||
+    article.category.toLowerCase().includes(query)||
+    article.description.toLowerCase().includes(query)
+  );
+
+  renderArticles(filtered);
+}
+
+function openArticle(id){
+  const article=articles.find(item=>item.id===id);
+  if(!article)return;
+
+  el("readerCategory").textContent=article.category;
+  el("readerTitle").textContent=article.title;
+  el("readerDate").textContent=article.date;
+  el("readerContent").textContent=article.content;
+
+  el("articleReader").style.display="block";
+  el("articleReader").scrollIntoView({behavior:"smooth"});
+}
+
+function closeArticle(){
+  el("articleReader").style.display="none";
+}
+
+/* Chat */
 function setStatus(id,text){
   el(id).textContent=text;
 }
@@ -156,12 +542,6 @@ async function enterChat(){
     }
 
     myUserId=session.user.id;
-
-    console.log("ChatMix session:",{
-      authenticated:!!session,
-      hasToken:!!session.access_token,
-      role:session.user.role
-    });
 
     const {data:existing,error:profileError}=await db
       .from("profiles")
@@ -215,18 +595,7 @@ async function enterChat(){
     },30000);
 
   }catch(error){
-    let debugSession=null;
-    try{
-      const result=await db.auth.getSession();
-      debugSession=result.data?.session;
-    }catch(e){}
-
-    setStatus("welcomeStatus",
-      "الخطأ: "+error.message+
-      " | الجلسة: "+!!debugSession+
-      " | JWT: "+!!debugSession?.access_token+
-      " | تطابق الحساب: "+(debugSession?.user?.id===myUserId)
-    );
+    setStatus("welcomeStatus","الخطأ: "+error.message);
   }finally{
     button.disabled=false;
   }
@@ -593,6 +962,10 @@ db.auth.getSession().then(({data})=>{
     setStatus("welcomeStatus","عندك جلسة سابقة. دخل بنفس الاسم المستعار.");
   }
 });
+
+/* Load demo articles */
+renderArticles();
 </script>
+
 </body>
 </html>
