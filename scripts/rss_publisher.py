@@ -1,110 +1,100 @@
-
 import os
 import re
+import json
 import html
 import urllib.request
 import urllib.parse
-import xml.etree.ElementTree as ET
+import feedparser
 
 SUPABASE_URL = os.environ["SUPABASE_URL"].rstrip("/")
 SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
 
 FEEDS = [
     {
-        "url": "https://rss.dw.com/xml/rss-ar-all",
+        "url": "https://feeds.bbci.co.uk/arabic/rss.xml",
         "language": "ar",
         "category": "أخبار",
         "icon": "📰",
+        "source": "BBC Arabic"
     },
     {
-        "url": "https://rss.dw.com/xml/rss-fr-all",
+        "url": "https://www.france24.com/fr/rss",
         "language": "fr",
         "category": "Actualités",
         "icon": "📰",
+        "source": "France 24"
     },
     {
         "url": "https://rss.dw.com/xml/rss-en-all",
         "language": "en",
         "category": "News",
         "icon": "📰",
-    },
+        "source": "Deutsche Welle"
+    }
 ]
+
 
 def clean_text(value):
     if not value:
         return ""
-    value = re.sub(r"<[^>]+>", " ", value)
+
+    value = re.sub(r"<[^>]*>", " ", str(value))
     value = html.unescape(value)
     return re.sub(r"\s+", " ", value).strip()
 
-def get_value(element, name):
-    for child in element.iter():
-        if child.tag.split("}")[-1] == name:
-            return child
-    return None
 
 def fetch_feed(feed):
     request = urllib.request.Request(
         feed["url"],
-        headers={"User-Agent": "ChatMix RSS Publisher/1.0"}
+        headers={
+            "User-Agent": "ChatMix RSS Publisher/2.0",
+            "Accept": "application/rss+xml, application/xml, text/xml"
+        }
     )
 
-    with urllib.request.urlopen(request, timeout=25) as response:
-        root = ET.fromstring(response.read())
+    with urllib.request.urlopen(request, timeout=30) as response:
+        data = response.read()
 
-    entries = []
+    parsed = feedparser.parse(data)
 
-    for item in root.iter():
-        if item.tag.split("}")[-1] not in ("item", "entry"):
-            continue
+    if not parsed.entries:
+        raise Exception("No RSS entries found")
 
-        title_node = get_value(item, "title")
-        description_node = (
-            get_value(item, "description")
-            or get_value(item, "summary")
-            or get_value(item, "encoded")
-        )
+    print("Found articles:", len(parsed.entries))
 
-        link_node = get_value(item, "link")
+    return parsed.entries
 
-        title = clean_text(
-            title_node.text if title_node is not None else ""
-        )
 
+def publish_article(entry, feed):
+    title = clean_text(entry.get("title", ""))
+    link = entry.get("link", "").strip()
+
+    summary = clean_text(entry.get("summary", ""))
+
+    if not summary and entry.get("content"):
         summary = clean_text(
-            "".join(description_node.itertext())
-            if description_node is not None else ""
+            entry["content"][0].get("value", "")
         )
 
-        link = ""
+    if not title:
+        return False
 
-        if link_node is not None:
-            link = (
-                link_node.attrib.get("href", "")
-                or link_node.text
-                or ""
-            ).strip()
+    if not link.startswith(("https://", "http://")):
+        return False
 
-        if title and link.startswith("https://") and summary:
-            entries.append({
-                "title": title[:250],
-                "summary": summary[:700],
-                "link": link,
-            })
+    if not summary:
+        summary = title
 
-    return entries
-
-def publish_article(article, feed):
     payload = {
-        "title": article["title"],
+        "title": title[:250],
         "category": feed["category"],
-        "content": article["summary"],
-        "description": article["summary"][:220],
+        "content": summary[:700],
+        "description": summary[:220],
         "icon": feed["icon"],
         "language": feed["language"],
-        "source_url": article["link"],
-        "source_name": "Deutsche Welle",
-        "published": True,
+        "source_url": link,
+        "source_name": feed["source"],
+        "published": True
     }
 
     url = (
@@ -115,7 +105,7 @@ def publish_article(article, feed):
         })
     )
 
-    data = __import__("json").dumps(payload).encode("utf-8")
+    data = json.dumps(payload).encode("utf-8")
 
     request = urllib.request.Request(
         url,
@@ -125,34 +115,36 @@ def publish_article(article, feed):
             "apikey": SUPABASE_KEY,
             "Authorization": "Bearer " + SUPABASE_KEY,
             "Content-Type": "application/json",
-            "Prefer": "resolution=ignore-duplicates,return=minimal",
+            "Prefer": "resolution=ignore-duplicates,return=minimal"
         }
     )
 
     with urllib.request.urlopen(request, timeout=30) as response:
-        return response.status
+        print("Published:", title[:80])
+        return True
+
 
 def main():
     total = 0
 
     for feed in FEEDS:
-        print("Reading:", feed["language"])
+        print("\nReading:", feed["language"], feed["source"])
 
         try:
-            articles = fetch_feed(feed)
+            entries = fetch_feed(feed)
 
-            for article in articles[:10]:
+            for entry in entries[:10]:
                 try:
-                    publish_article(article, feed)
-                    total += 1
-                    print("Processed:", article["title"])
+                    if publish_article(entry, feed):
+                        total += 1
                 except Exception as error:
                     print("Article error:", error)
 
         except Exception as error:
             print("Feed error:", feed["language"], error)
 
-    print("Finished. Processed:", total)
+    print("\nFinished. Processed:", total)
+
 
 if __name__ == "__main__":
     main()
